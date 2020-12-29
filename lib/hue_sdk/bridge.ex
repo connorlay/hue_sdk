@@ -3,8 +3,6 @@ defmodule HueSDK.Bridge do
   Interface to the Hue Bridge, required for all calls to the Hue SDK Rest API
   """
 
-  @bridge_directory Path.expand("~/.hue_sdk/bridge/")
-
   require Logger
 
   defstruct [
@@ -74,7 +72,7 @@ defmodule HueSDK.Bridge do
 
   def write_to_disk(bridge) do
     ensure_bridge_directory()
-    bridge_file = Path.join([@bridge_directory, bridge.bridge_id])
+    bridge_file = Path.join([bridge_directory(), bridge.bridge_id])
     File.write!(bridge_file, :erlang.term_to_binary(bridge))
     Logger.debug("Bridge write to '#{bridge_file}'")
     :ok
@@ -83,8 +81,8 @@ defmodule HueSDK.Bridge do
   def read_from_disk() do
     ensure_bridge_directory()
 
-    for bridge_id <- File.ls!(@bridge_directory) do
-      bridge_file = Path.join([@bridge_directory, bridge_id])
+    for bridge_id <- File.ls!(bridge_directory()) do
+      bridge_file = Path.join([bridge_directory(), bridge_id])
 
       bridge =
         bridge_file
@@ -100,8 +98,8 @@ defmodule HueSDK.Bridge do
   def cleanup() do
     ensure_bridge_directory()
 
-    for bridge_id <- File.ls!(@bridge_directory) do
-      bridge_file = Path.join([@bridge_directory, bridge_id])
+    for bridge_id <- File.ls!(bridge_directory()) do
+      bridge_file = Path.join([bridge_directory(), bridge_id])
       File.rm!(bridge_file)
       Logger.debug("Bridge deleted from '#{bridge_file}'")
     end
@@ -110,13 +108,15 @@ defmodule HueSDK.Bridge do
   end
 
   defp ensure_bridge_directory() do
-    if File.exists?(@bridge_directory) do
+    if File.exists?(bridge_directory()) do
       :ok
     else
-      Logger.debug("Bridge directory created at '#{@bridge_directory}'")
-      File.mkdir_p!(@bridge_directory)
+      Logger.debug("Bridge directory created at '#{bridge_directory()}'")
+      File.mkdir_p!(bridge_directory())
     end
   end
 
   defp ip_tuple_to_host({a, b, c, d}), do: "#{a}.#{b}.#{c}.#{d}"
+
+  defp bridge_directory(), do: Path.expand("~/.hue_sdk/bridge/")
 end
