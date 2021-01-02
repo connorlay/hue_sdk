@@ -6,7 +6,7 @@ defmodule HueSDK.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Finch, name: HueSDK.API}
+      {Finch, name: HueSDK.HTTP}
     ]
 
     opts = [strategy: :one_for_one, name: HueSDK.Supervisor]

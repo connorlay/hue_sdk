@@ -1,4 +1,4 @@
-defmodule HueSDK.API do
+defmodule HueSDK.HTTP do
   @moduledoc false
 
   require Logger
@@ -26,12 +26,12 @@ defmodule HueSDK.API do
     |> Finch.request(__MODULE__)
     |> case do
       {:ok, resp} ->
-        Logger.debug("HueSDK request #{method} #{resp.status} #{url}")
-        decoder_fun.(resp.body)
+        Logger.debug("HTTP request method '#{method}' url '#{url}' status '#{resp.status}'")
+        {:ok, decoder_fun.(resp.body)}
 
-      error ->
-        Logger.warn("HueSDK request #{method} #{url}")
-        error
+      {:error, error} ->
+        Logger.debug("HTTP request method '#{method}' url '#{url}' error '#{inspect(error)}'")
+        {:error, error}
     end
   end
 end

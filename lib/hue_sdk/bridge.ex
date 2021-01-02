@@ -9,7 +9,6 @@ defmodule HueSDK.Bridge do
     :api_version,
     :bridge_id,
     :datastore_version,
-    :domain,
     :host,
     :mac,
     :model_id,
@@ -20,31 +19,37 @@ defmodule HueSDK.Bridge do
 
   @doc """
   Automatic discovery of the Hue Bridge
-
-  Currently only supports mDNS via `HueSDK.Discovery.MDNS`
   """
   def discover() do
-    case HueSDK.Discovery.MDNS.discover() do
-      nil ->
-        nil
+    bridge = do_discovery_flow()
+    {:ok, config} = HueSDK.API.Configuration.get_bridge_config(bridge)
 
-      device ->
-        bridge = %__MODULE__{
-          host: ip_tuple_to_host(device.ip),
-          domain: device.domain,
-          bridge_id: device.payload["bridgeid"],
-          model_id: device.payload["modelid"]
+    Map.merge(bridge, %{
+      api_version: config["apiversion"],
+      datastore_version: config["datastoreversion"],
+      model_id: config["modelid"],
+      mac: config["mac"],
+      name: config["name"],
+      sw_version: config["swversion"]
+    })
+  end
+
+  defp do_discovery_flow() do
+    with {:nupnp, nil} <- HueSDK.Discovery.NUPNP.discover(),
+         {:mdns, nil} <- HueSDK.Discovery.MDNS.discover() do
+      nil
+    else
+      {:nupnp, device} ->
+        %__MODULE__{
+          host: device["internalipaddress"],
+          bridge_id: device["id"]
         }
 
-        config = HueSDK.API.Configuration.get_bridge_config(bridge)
-
-        Map.merge(bridge, %{
-          api_version: config["apiversion"],
-          datastore_version: config["datastoreversion"],
-          mac: config["mac"],
-          name: config["name"],
-          sw_version: config["swversion"]
-        })
+      {:mdns, device} ->
+        %__MODULE__{
+          host: ip_tuple_to_host(device.ip),
+          bridge_id: device.payload["bridgeid"]
+        }
     end
   end
 
@@ -53,18 +58,16 @@ defmodule HueSDK.Bridge do
   def authenticate(bridge, devicetype) do
     username =
       case HueSDK.API.Configuration.create_user(bridge, devicetype) do
-        [%{"success" => %{"username" => username}}] ->
+        {:ok, [%{"success" => %{"username" => username}}]} ->
           Logger.debug("Bridge created username '#{username}' for devicetype '#{devicetype}'")
           username
 
-        error ->
+        {:ok, [%{"error" => error}]} ->
           Logger.warn(
             "Bridge failed to create username for devicetype '#{devicetype}' with error '#{
               inspect(error)
             }'"
           )
-
-          nil
       end
 
     %{bridge | username: username}

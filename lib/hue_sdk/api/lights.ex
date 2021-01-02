@@ -4,13 +4,13 @@ defmodule HueSDK.API.Lights do
   https://developers.meethue.com/develop/hue-api/lights-api/
   """
 
-  import HueSDK.API
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all lights that have been discovered by the bridge.
   """
   def get_all_lights(bridge) do
-    request(
+    HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/lights",
       &Jason.decode!/1
@@ -22,7 +22,7 @@ defmodule HueSDK.API.Lights do
   The list of new lights is always deleted when a new search is started.
   """
   def get_new_lights(bridge) do
-    request(
+    HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/lights/new",
       &Jason.decode!/1
@@ -37,7 +37,7 @@ defmodule HueSDK.API.Lights do
   When the search has finished, new lights will be available using the get new lights command. In addition, the new lights will now be available by calling get all lights or by calling get group attributes on group 0. Group 0 is a special group that cannot be deleted and will always contain all lights known by the bridge.
   """
   def search_for_new_lights(bridge) do
-    request(
+    HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/lights",
       &Jason.decode!/1
@@ -48,7 +48,7 @@ defmodule HueSDK.API.Lights do
   Gets the attributes and state of a given light.
   """
   def get_light_attributes_and_state(bridge, id) do
-    request(
+    HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
       &Jason.decode!/1
@@ -60,7 +60,7 @@ defmodule HueSDK.API.Lights do
   A light can have its name changed when in any state, including when it is unreachable or off.
   """
   def set_light_name(bridge, id, name) do
-    request(
+    HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
       Jason.encode!(%{name: name}),
@@ -72,7 +72,7 @@ defmodule HueSDK.API.Lights do
   Allows the user to turn the light on and off, modify the hue and effects.
   """
   def set_light_state(bridge, id, state) do
-    request(
+    HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}/state",
       Jason.encode!(state),
@@ -84,7 +84,7 @@ defmodule HueSDK.API.Lights do
   Deletes a light from the bridge.
   """
   def delete_light(bridge, id) do
-    request(
+    HTTP.request(
       :delete,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
       &Jason.decode!/1

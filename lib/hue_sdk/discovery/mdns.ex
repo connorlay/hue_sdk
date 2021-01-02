@@ -40,15 +40,15 @@ defmodule HueSDK.Discovery.MDNS do
 
       [device] ->
         Logger.debug("mDNS discovered device #{inspect(device)}")
-        device
+        {:mdns, device}
 
       [device | _devices] ->
         Logger.debug("mDNS discovered multiple devices, picking first #{inspect(device)}")
-        device
+        {:mdns, device}
     end
   end
 
-  defp poll_for_discovery(_attempt), do: nil
+  defp poll_for_discovery(_attempt), do: {:mdns, nil}
 
   defp stop_discovery() do
     Logger.debug("mDNS stopping discovery for namespace '#{@namespace}'..")
