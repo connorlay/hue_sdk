@@ -4,7 +4,7 @@ defmodule HueSDK.API.Sensors do
   https://developers.meethue.com/develop/hue-api/5-sensors-api/
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{HTTP, JSON}
 
   @doc """
   Gets a list of all sensors that have been added to the bridge.
@@ -13,7 +13,7 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/sensors",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -24,7 +24,7 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -35,8 +35,8 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/sensors",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -47,7 +47,7 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/sensors",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -58,7 +58,7 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/sensors/new",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -69,8 +69,8 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
-      Jason.encode!(%{name: name}),
-      &Jason.decode!/1
+      JSON.encode!(%{name: name}),
+      &JSON.decode!/1
     )
   end
 
@@ -81,7 +81,7 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :delete,
       "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -92,8 +92,8 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/config",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -104,8 +104,8 @@ defmodule HueSDK.API.Sensors do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/state",
-      Jason.encode!(state),
-      &Jason.decode!/1
+      JSON.encode!(state),
+      &JSON.decode!/1
     )
   end
 end

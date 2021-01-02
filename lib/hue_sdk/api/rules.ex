@@ -4,7 +4,7 @@ defmodule HueSDK.API.Rules do
   https://developers.meethue.com/develop/hue-api/6-rules-api/
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{HTTP, JSON}
 
   @doc """
   Gets a list of all rules that are in the bridge.
@@ -13,7 +13,7 @@ defmodule HueSDK.API.Rules do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/rules",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -24,7 +24,7 @@ defmodule HueSDK.API.Rules do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -35,8 +35,8 @@ defmodule HueSDK.API.Rules do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/rules",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -47,8 +47,8 @@ defmodule HueSDK.API.Rules do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -59,7 +59,7 @@ defmodule HueSDK.API.Rules do
     HTTP.request(
       :delete,
       "http://#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 end

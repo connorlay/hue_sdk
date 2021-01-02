@@ -4,7 +4,7 @@ defmodule HueSDK.API.Lights do
   https://developers.meethue.com/develop/hue-api/lights-api/
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{HTTP, JSON}
 
   @doc """
   Gets a list of all lights that have been discovered by the bridge.
@@ -13,7 +13,7 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/lights",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -25,7 +25,7 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/lights/new",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -40,7 +40,7 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/lights",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -51,7 +51,7 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -63,8 +63,8 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
-      Jason.encode!(%{name: name}),
-      &Jason.decode!/1
+      JSON.encode!(%{name: name}),
+      &JSON.decode!/1
     )
   end
 
@@ -75,8 +75,8 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}/state",
-      Jason.encode!(state),
-      &Jason.decode!/1
+      JSON.encode!(state),
+      &JSON.decode!/1
     )
   end
 
@@ -87,7 +87,7 @@ defmodule HueSDK.API.Lights do
     HTTP.request(
       :delete,
       "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 end

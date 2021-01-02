@@ -3,6 +3,9 @@ defmodule HueSDK.Bridge do
   Interface to the Hue Bridge, required for all calls to the Hue SDK Rest API
   """
 
+  alias HueSDK.API.Configuration
+  alias HueSDK.Discovery.{MDNS, NUPNP}
+
   require Logger
 
   defstruct [
@@ -22,7 +25,7 @@ defmodule HueSDK.Bridge do
   """
   def discover() do
     bridge = do_discovery_flow()
-    {:ok, config} = HueSDK.API.Configuration.get_bridge_config(bridge)
+    {:ok, config} = Configuration.get_bridge_config(bridge)
 
     Map.merge(bridge, %{
       api_version: config["apiversion"],
@@ -35,8 +38,8 @@ defmodule HueSDK.Bridge do
   end
 
   defp do_discovery_flow() do
-    with {:nupnp, nil} <- HueSDK.Discovery.NUPNP.discover(),
-         {:mdns, nil} <- HueSDK.Discovery.MDNS.discover() do
+    with {:nupnp, nil} <- NUPNP.discover(),
+         {:mdns, nil} <- MDNS.discover() do
       nil
     else
       {:nupnp, device} ->
@@ -57,7 +60,7 @@ defmodule HueSDK.Bridge do
   """
   def authenticate(bridge, devicetype) do
     username =
-      case HueSDK.API.Configuration.create_user(bridge, devicetype) do
+      case Configuration.create_user(bridge, devicetype) do
         {:ok, [%{"success" => %{"username" => username}}]} ->
           Logger.debug("Bridge created username '#{username}' for devicetype '#{devicetype}'")
           username

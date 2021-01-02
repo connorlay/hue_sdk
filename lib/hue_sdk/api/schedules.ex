@@ -4,7 +4,7 @@ defmodule HueSDK.API.Schedules do
   https://developers.meethue.com/develop/hue-api/3-schedules-api/
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{HTTP, JSON}
 
   @doc """
   Gets a list of all schedules that have been added to the bridge.
@@ -13,7 +13,7 @@ defmodule HueSDK.API.Schedules do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/schedules",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -24,8 +24,8 @@ defmodule HueSDK.API.Schedules do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/schedules",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -36,7 +36,7 @@ defmodule HueSDK.API.Schedules do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -47,8 +47,8 @@ defmodule HueSDK.API.Schedules do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -59,7 +59,7 @@ defmodule HueSDK.API.Schedules do
     HTTP.request(
       :delete,
       "http://#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 end

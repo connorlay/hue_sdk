@@ -4,7 +4,7 @@ defmodule HueSDK.API.Scenes do
   https://developers.meethue.com/develop/hue-api/4-scenes/
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{HTTP, JSON}
 
   @doc """
   Gets a list of all scenes currently stored in the bridge.
@@ -13,7 +13,7 @@ defmodule HueSDK.API.Scenes do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/scenes",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -24,8 +24,8 @@ defmodule HueSDK.API.Scenes do
     HTTP.request(
       :post,
       "http://#{bridge.host}/api/#{bridge.username}/scenes",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -36,7 +36,7 @@ defmodule HueSDK.API.Scenes do
     HTTP.request(
       :get,
       "http://#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 
@@ -47,8 +47,8 @@ defmodule HueSDK.API.Scenes do
     HTTP.request(
       :put,
       "http://#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}/lightstates/#{scene_id}",
-      Jason.encode!(attributes),
-      &Jason.decode!/1
+      JSON.encode!(attributes),
+      &JSON.decode!/1
     )
   end
 
@@ -59,7 +59,7 @@ defmodule HueSDK.API.Scenes do
     HTTP.request(
       :delete,
       "http://#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}",
-      &Jason.decode!/1
+      &JSON.decode!/1
     )
   end
 end
