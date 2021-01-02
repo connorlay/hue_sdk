@@ -47,10 +47,10 @@ defmodule HueSDK.API.Lights do
   @doc """
   Gets the attributes and state of a given light.
   """
-  def get_light_attributes_and_state(bridge, id) do
+  def get_light_attributes_and_state(bridge, light_id) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
+      "http://#{bridge.host}/api/#{bridge.username}/lights/#{light_id}",
       &JSON.decode!/1
     )
   end
@@ -59,10 +59,10 @@ defmodule HueSDK.API.Lights do
   Used to rename lights.
   A light can have its name changed when in any state, including when it is unreachable or off.
   """
-  def set_light_name(bridge, id, name) do
+  def set_light_name(bridge, light_id, name) do
     HTTP.request(
       :put,
-      "http://#{bridge.host}/api/#{bridge.username}/lights/#{id}",
+      "http://#{bridge.host}/api/#{bridge.username}/lights/#{light_id}",
       JSON.encode!(%{name: name}),
       &JSON.decode!/1
     )
