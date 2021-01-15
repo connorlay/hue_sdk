@@ -4,37 +4,54 @@ defmodule HueSDK.API.LightsTest do
 
   use HueSDK.APICase, async: true
 
+  @json_resp %{"1" => %{"name" => "example"}}
+  @http_error %Mint.TransportError{reason: :econnrefused}
+
   describe "get_all_lights/1" do
-    test_generic_json_success("GET", "/lights", &Lights.get_all_lights/1)
-    test_generic_http_error(&Lights.get_all_lights/1)
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      get(bypass, "/api/#{bridge.username}/lights", @json_resp)
+      assert {:ok, @json_resp} == Lights.get_all_lights(bridge)
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.get_all_lights(bridge)
+    end
   end
 
   describe "get_new_lights/1" do
-    test_generic_json_success("GET", "/lights/new", &Lights.get_new_lights/1)
-    test_generic_http_error(&Lights.get_new_lights/1)
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      get(bypass, "/api/#{bridge.username}/lights/new", @json_resp)
+      assert {:ok, @json_resp} == Lights.get_new_lights(bridge)
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.get_new_lights(bridge)
+    end
   end
 
   describe "search_for_new_lights/1" do
-    test_generic_json_success("POST", "/lights", &Lights.search_for_new_lights/1)
-    test_generic_http_error(&Lights.search_for_new_lights/1)
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      post(bypass, "/api/#{bridge.username}/lights", nil, @json_resp)
+      assert {:ok, @json_resp} == Lights.search_for_new_lights(bridge)
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.search_for_new_lights(bridge)
+    end
   end
 
-  describe "get_light_attributes_and_state/2" do
-    test_generic_json_success(
-      "GET",
-      "/lights/1",
-      &Lights.get_light_attributes_and_state(&1, "1")
-    )
+  describe "get_light_attributes_and_state/1" do
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      get(bypass, "/api/#{bridge.username}/lights/1", @json_resp)
+      assert {:ok, @json_resp} == Lights.get_light_attributes_and_state(bridge, "1")
+    end
 
-    test_generic_http_error(&Lights.get_light_attributes_and_state(&1, "1"))
-  end
-
-  describe "set_light_name/3" do
-    test_generic_json_success(
-      "PUT",
-      "/lights/1",
-      %{name: "example"},
-      &Lights.set_light_name(&1, "1", "example")
-    )
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.get_light_attributes_and_state(bridge, "1")
+    end
   end
 end
