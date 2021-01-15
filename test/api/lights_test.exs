@@ -43,7 +43,7 @@ defmodule HueSDK.API.LightsTest do
     end
   end
 
-  describe "get_light_attributes_and_state/1" do
+  describe "get_light_attributes_and_state/2" do
     test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
       get(bypass, "/api/#{bridge.username}/lights/1", @json_resp)
       assert {:ok, @json_resp} == Lights.get_light_attributes_and_state(bridge, "1")
@@ -52,6 +52,42 @@ defmodule HueSDK.API.LightsTest do
     test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
       Bypass.down(bypass)
       assert {:error, @http_error} == Lights.get_light_attributes_and_state(bridge, "1")
+    end
+  end
+
+  describe "set_light_name/3" do
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      put(bypass, "/api/#{bridge.username}/lights/1", %{"name" => "new-light-name"}, @json_resp)
+      assert {:ok, @json_resp} == Lights.set_light_name(bridge, "1", "new-light-name")
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.set_light_name(bridge, "1", "new-light-name")
+    end
+  end
+
+  describe "set_light_state/3" do
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      put(bypass, "/api/#{bridge.username}/lights/1/state", %{"on" => true}, @json_resp)
+      assert {:ok, @json_resp} == Lights.set_light_state(bridge, "1", %{"on" => true})
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.set_light_state(bridge, "1", %{"on" => true})
+    end
+  end
+
+  describe "delete_light/3" do
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      delete(bypass, "/api/#{bridge.username}/lights/1", @json_resp)
+      assert {:ok, @json_resp} == Lights.delete_light(bridge, "1")
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Lights.delete_light(bridge, "1")
     end
   end
 end
