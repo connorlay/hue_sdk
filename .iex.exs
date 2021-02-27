@@ -10,4 +10,8 @@ alias HueSDK.API.{
   Sensors
 }
 
-[bridge] = HueSDK.Bridge.read_from_disk()
+bridge =
+  case HueSDK.Bridge.read_from_disk() do
+    [bridge] -> bridge
+    [] -> nil
+  end

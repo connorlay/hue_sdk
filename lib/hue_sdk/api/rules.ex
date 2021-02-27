@@ -12,7 +12,9 @@ defmodule HueSDK.API.Rules do
   def get_all_rules(bridge) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/rules",
+      "#{bridge.host}/api/#{bridge.username}/rules",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -23,7 +25,9 @@ defmodule HueSDK.API.Rules do
   def get_rule_attributes(bridge, rule_id) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
+      "#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -34,7 +38,8 @@ defmodule HueSDK.API.Rules do
   def create_rule(bridge, attributes) do
     HTTP.request(
       :post,
-      "http://#{bridge.host}/api/#{bridge.username}/rules",
+      "#{bridge.host}/api/#{bridge.username}/rules",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -46,7 +51,8 @@ defmodule HueSDK.API.Rules do
   def update_rule(bridge, rule_id, attributes) do
     HTTP.request(
       :post,
-      "http://#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
+      "#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -58,7 +64,9 @@ defmodule HueSDK.API.Rules do
   def delete_rule(bridge, rule_id) do
     HTTP.request(
       :delete,
-      "http://#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
+      [],
+      nil,
+      "#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
       &JSON.decode!/1
     )
   end

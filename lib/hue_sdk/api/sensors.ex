@@ -12,7 +12,9 @@ defmodule HueSDK.API.Sensors do
   def get_all_sensors(bridge) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors",
+      "#{bridge.host}/api/#{bridge.username}/sensors",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -23,7 +25,9 @@ defmodule HueSDK.API.Sensors do
   def get_sensor_attributes(bridge, sensor_id) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -34,7 +38,8 @@ defmodule HueSDK.API.Sensors do
   def create_sensor(bridge, attributes) do
     HTTP.request(
       :post,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors",
+      "#{bridge.host}/api/#{bridge.username}/sensors",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -46,7 +51,9 @@ defmodule HueSDK.API.Sensors do
   def search_for_new_sensors(bridge) do
     HTTP.request(
       :post,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors",
+      "#{bridge.host}/api/#{bridge.username}/sensors",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -57,7 +64,9 @@ defmodule HueSDK.API.Sensors do
   def get_new_sensors(bridge) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors/new",
+      "#{bridge.host}/api/#{bridge.username}/sensors/new",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -68,7 +77,8 @@ defmodule HueSDK.API.Sensors do
   def set_sensor_name(bridge, sensor_id, name) do
     HTTP.request(
       :put,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      [],
       JSON.encode!(%{name: name}),
       &JSON.decode!/1
     )
@@ -80,7 +90,9 @@ defmodule HueSDK.API.Sensors do
   def delete_sensor(bridge, sensor_id) do
     HTTP.request(
       :delete,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -91,7 +103,8 @@ defmodule HueSDK.API.Sensors do
   def set_sensor_attributes(bridge, sensor_id, attributes) do
     HTTP.request(
       :put,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/config",
+      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/config",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -103,7 +116,8 @@ defmodule HueSDK.API.Sensors do
   def set_sensor_state(bridge, sensor_id, state) do
     HTTP.request(
       :put,
-      "http://#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/state",
+      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/state",
+      [],
       JSON.encode!(state),
       &JSON.decode!/1
     )

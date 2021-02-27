@@ -1,9 +1,11 @@
 defmodule HueSDK.JSON do
-  @moduledoc false
+  @moduledoc """
+  JSON parsing for the Hue SDK.
 
-  @doc false
-  def decode!(term), do: Jason.decode!(term)
+  Delegates to `Jason`.
+  """
 
-  @doc false
-  def encode!(term), do: Jason.encode!(term)
+  defdelegate decode!(term), to: Jason
+
+  defdelegate encode!(term), to: Jason
 end

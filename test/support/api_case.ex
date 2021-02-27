@@ -1,5 +1,10 @@
 defmodule HueSDK.APICase do
-  @moduledoc false
+  @moduledoc """
+  `ExUnit.CaseTemplate` used for testing functions under the `HueSDK.API` namespace.
+
+  Utlizes `Bypass` as a stubbed HTTP server. SSL is not currently supported, so it is
+  disabled for these tests. See [this GitHub issue](https://github.com/PSPDFKit-labs/bypass/issues/63).
+  """
 
   alias HueSDK.JSON
 

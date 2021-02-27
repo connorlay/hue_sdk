@@ -12,7 +12,9 @@ defmodule HueSDK.API.Capabilities do
   def get_all_capabilities(bridge) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/capabilities",
+      "#{bridge.host}/api/#{bridge.username}/capabilities",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end

@@ -1,6 +1,6 @@
 defmodule HueSDK.Discovery.MDNS do
   @moduledoc """
-  Automatic discovery for the Hue Bridge via mDNS
+  Automatic discovery for the Hue Bridge via mDNS.
   """
 
   @namespace "_hue._tcp.local"
@@ -9,12 +9,18 @@ defmodule HueSDK.Discovery.MDNS do
 
   require Logger
 
+  @typedoc """
+  The parsed JSON response, tagged by the discovery protocol.
+  """
+  @type mdns_result :: {:mdns, map() | nil}
+
   @doc """
   Attempts to discover any Hue Bridge devices on the local 
-  network by querying the namespace '#{@namespace}'
+  network by querying the namespace '#{@namespace}'.
 
-  Performs #{@max_attempts} attempts before giving up
+  Performs #{@max_attempts} attempts before giving up.
   """
+  @spec discover() :: mdns_result()
   def discover() do
     start_discovery()
     device = poll_for_discovery()

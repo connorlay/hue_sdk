@@ -1,5 +1,7 @@
 defmodule HueSDK do
-  @moduledoc """
-  An unofficial Elixir SDK for the Hue Bridge REST API.
-  """
+  @external_resource "README.md"
+  @moduledoc "README.md"
+             |> File.read!()
+             |> String.split("<!-- MDOC !-->")
+             |> Enum.fetch!(1)
 end

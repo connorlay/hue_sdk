@@ -12,7 +12,9 @@ defmodule HueSDK.API.Resourcelinks do
   def get_all_resourcelinks(bridge) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/resourcelinks",
+      "#{bridge.host}/api/#{bridge.username}/resourcelinks",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -23,7 +25,8 @@ defmodule HueSDK.API.Resourcelinks do
   def create_resourcelink(bridge, attributes) do
     HTTP.request(
       :post,
-      "http://#{bridge.host}/api/#{bridge.username}/resourcelinks",
+      "#{bridge.host}/api/#{bridge.username}/resourcelinks",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -35,7 +38,8 @@ defmodule HueSDK.API.Resourcelinks do
   def update_resourcelink(bridge, resourcelink_id, attributes) do
     HTTP.request(
       :put,
-      "http://#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
+      "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -47,7 +51,9 @@ defmodule HueSDK.API.Resourcelinks do
   def delete_resourcelink(bridge, resourcelink_id) do
     HTTP.request(
       :delete,
-      "http://#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
+      "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end

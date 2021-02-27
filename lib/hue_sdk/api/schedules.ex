@@ -12,7 +12,9 @@ defmodule HueSDK.API.Schedules do
   def get_all_schedules(bridge) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/schedules",
+      "#{bridge.host}/api/#{bridge.username}/schedules",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -23,7 +25,8 @@ defmodule HueSDK.API.Schedules do
   def create_schedule(bridge, attributes) do
     HTTP.request(
       :post,
-      "http://#{bridge.host}/api/#{bridge.username}/schedules",
+      "#{bridge.host}/api/#{bridge.username}/schedules",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -35,7 +38,9 @@ defmodule HueSDK.API.Schedules do
   def get_schedule_attributes(bridge, schedule_id) do
     HTTP.request(
       :get,
-      "http://#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
+      "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
@@ -46,7 +51,8 @@ defmodule HueSDK.API.Schedules do
   def set_schedule_attributes(bridge, schedule_id, attributes) do
     HTTP.request(
       :put,
-      "http://#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
+      "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
+      [],
       JSON.encode!(attributes),
       &JSON.decode!/1
     )
@@ -58,7 +64,9 @@ defmodule HueSDK.API.Schedules do
   def delete_schedule(bridge, schedule_id) do
     HTTP.request(
       :delete,
-      "http://#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
+      "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end

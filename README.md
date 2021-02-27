@@ -1,5 +1,7 @@
 # Elixir Hue SDK
 
+<!-- MDOC !-->
+
 An unofficial Elixir SDK for the Philips Hue personal wireless lightning system.
 
 ## Features
@@ -36,10 +38,17 @@ The Hue SDK supports [automatic bridge discovery](https://developers.meethue.com
 * [ ] UPnP
 * [ ] IP Scan
 
+## Protocols
+
+* [x] HTTP
+* [x] [HTTPS](https://developers.meethue.com/developing-hue-apps-via-https/)
+
 ### Remote Calls
 
 * [ ] [Remote API](https://developers.meethue.com/develop/hue-api/remote-api-quick-start-guide/)
 * [ ] [Remote Authentication](https://developers.meethue.com/develop/hue-api/remote-authentication/)
+
+<!-- MDOC !-->
 
 ## Installation
 
