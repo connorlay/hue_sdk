@@ -41,7 +41,7 @@ defmodule HueSDK.MixProject do
       {:mdns, "~> 1.0"},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:bypass, "~> 2.1", only: :test},
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 end

@@ -50,7 +50,7 @@ defmodule HueSDK.API.Rules do
   """
   def update_rule(bridge, rule_id, attributes) do
     HTTP.request(
-      :post,
+      :put,
       "#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
       [],
       JSON.encode!(attributes),
@@ -64,9 +64,9 @@ defmodule HueSDK.API.Rules do
   def delete_rule(bridge, rule_id) do
     HTTP.request(
       :delete,
+      "#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
       [],
       nil,
-      "#{bridge.host}/api/#{bridge.username}/rules/#{rule_id}",
       &JSON.decode!/1
     )
   end

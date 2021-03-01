@@ -20,19 +20,6 @@ defmodule HueSDK.API.Scenes do
   end
 
   @doc """
-  Creates the given scene with all lights in the provided lights resource.
-  """
-  def create_scene(bridge, attributes) do
-    HTTP.request(
-      :post,
-      "#{bridge.host}/api/#{bridge.username}/scenes",
-      [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
-    )
-  end
-
-  @doc """
   Gets the attributes of a given scene.
   """
   def get_scene_attributes(bridge, scene_id) do
@@ -41,6 +28,19 @@ defmodule HueSDK.API.Scenes do
       "#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}",
       [],
       nil,
+      &JSON.decode!/1
+    )
+  end
+
+  @doc """
+  Creates the given scene with all lights in the provided lights resource.
+  """
+  def create_scene(bridge, attributes) do
+    HTTP.request(
+      :post,
+      "#{bridge.host}/api/#{bridge.username}/scenes",
+      [],
+      JSON.encode!(attributes),
       &JSON.decode!/1
     )
   end
@@ -61,7 +61,7 @@ defmodule HueSDK.API.Scenes do
   @doc """
   Deletes a scene from the bridge.
   """
-  def modify_scene(bridge, scene_id) do
+  def delete_scene(bridge, scene_id) do
     HTTP.request(
       :delete,
       "#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}",

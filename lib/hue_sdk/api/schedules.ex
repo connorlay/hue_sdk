@@ -20,19 +20,6 @@ defmodule HueSDK.API.Schedules do
   end
 
   @doc """
-  Allows the user to create new schedules. The bridge can store up to 100 schedules.
-  """
-  def create_schedule(bridge, attributes) do
-    HTTP.request(
-      :post,
-      "#{bridge.host}/api/#{bridge.username}/schedules",
-      [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
-    )
-  end
-
-  @doc """
   Gets all attributes for a schedule.
   """
   def get_schedule_attributes(bridge, schedule_id) do
@@ -41,6 +28,19 @@ defmodule HueSDK.API.Schedules do
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
       nil,
+      &JSON.decode!/1
+    )
+  end
+
+  @doc """
+  Allows the user to create new schedules. The bridge can store up to 100 schedules.
+  """
+  def create_schedule(bridge, attributes) do
+    HTTP.request(
+      :post,
+      "#{bridge.host}/api/#{bridge.username}/schedules",
+      [],
+      JSON.encode!(attributes),
       &JSON.decode!/1
     )
   end
