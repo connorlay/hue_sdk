@@ -79,6 +79,30 @@ defmodule HueSDK.API.SensorsTest do
     end
   end
 
+  describe "set_sensor_attributes/3" do
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      put(bypass, "/api/#{bridge.username}/sensors/1/config", %{}, @json_resp)
+      assert {:ok, @json_resp} == Sensors.set_sensor_attributes(bridge, 1, %{})
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Sensors.set_sensor_attributes(bridge, 1, %{})
+    end
+  end
+
+  describe "set_sensor_state/3" do
+    test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
+      put(bypass, "/api/#{bridge.username}/sensors/1/state", %{}, @json_resp)
+      assert {:ok, @json_resp} == Sensors.set_sensor_state(bridge, 1, %{})
+    end
+
+    test "returns a http error if the request fails", %{bypass: bypass, bridge: bridge} do
+      Bypass.down(bypass)
+      assert {:error, @http_error} == Sensors.set_sensor_state(bridge, 1, %{})
+    end
+  end
+
   describe "delete_sensor/2" do
     test "returns parsed JSON if the request succeeds", %{bypass: bypass, bridge: bridge} do
       delete(bypass, "/api/#{bridge.username}/sensors/1", @json_resp)

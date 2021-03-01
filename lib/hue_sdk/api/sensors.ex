@@ -85,19 +85,6 @@ defmodule HueSDK.API.Sensors do
   end
 
   @doc """
-  All sensors can be deleted.
-  """
-  def delete_sensor(bridge, sensor_id) do
-    HTTP.request(
-      :delete,
-      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
-      [],
-      nil,
-      &JSON.decode!/1
-    )
-  end
-
-  @doc """
   The allowed configuration parameters depend on the sensor type.
   """
   def set_sensor_attributes(bridge, sensor_id, attributes) do
@@ -119,6 +106,19 @@ defmodule HueSDK.API.Sensors do
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/state",
       [],
       JSON.encode!(state),
+      &JSON.decode!/1
+    )
+  end
+
+  @doc """
+  All sensors can be deleted.
+  """
+  def delete_sensor(bridge, sensor_id) do
+    HTTP.request(
+      :delete,
+      "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
+      [],
+      nil,
       &JSON.decode!/1
     )
   end
