@@ -1,6 +1,5 @@
 defmodule HueSDK.RulesTest do
   alias HueSDK.API.Rules
-  alias HueSDK.JSON
 
   use HueSDK.APICase, async: true
 

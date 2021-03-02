@@ -1,6 +1,5 @@
 defmodule HueSDK.ResourcelinksTest do
   alias HueSDK.API.Resourcelinks
-  alias HueSDK.JSON
 
   use HueSDK.APICase, async: true
 

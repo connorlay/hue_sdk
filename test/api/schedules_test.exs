@@ -1,6 +1,5 @@
 defmodule HueSDK.API.SchedulesTest do
   alias HueSDK.API.Schedules
-  alias HueSDK.JSON
 
   use HueSDK.APICase, async: true
 

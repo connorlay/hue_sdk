@@ -1,6 +1,5 @@
 defmodule HueSDK.API.SensorsTest do
   alias HueSDK.API.Sensors
-  alias HueSDK.JSON
 
   use HueSDK.APICase, async: true
 
