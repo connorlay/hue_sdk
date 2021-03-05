@@ -3,9 +3,11 @@ defmodule HueSDK.Discovery.MDNS do
   Automatic discovery for the Hue Bridge via mDNS.
   """
 
-  @namespace "_hue._tcp.local"
-  @max_attempts 10
-  @sleep 3 * 1000
+  @default_opts [
+    namespace: "_hue._tcp.local",
+    max_attempts: 10,
+    sleep: 3 * 1000
+  ]
 
   require Logger
 
@@ -16,15 +18,14 @@ defmodule HueSDK.Discovery.MDNS do
 
   @doc """
   Attempts to discover any Hue Bridge devices on the local 
-  network by querying the namespace '#{@namespace}'.
-
-  Performs #{@max_attempts} attempts before giving up.
+  network via multicast DNS.
   """
-  @spec discover() :: mdns_result()
-  def discover(namespace \\ @namespace) do
-    start_discovery(namespace)
-    device = poll_for_discovery(namespace)
-    stop_discovery(namespace)
+  @spec discover(keyword()) :: mdns_result()
+  def discover(opts \\ []) do
+    all_opts = Keyword.merge(@default_opts, opts)
+    start_discovery(all_opts[:namespace])
+    device = poll_for_discovery(all_opts[:namespace], all_opts[:max_attempts], all_opts[:sleep])
+    stop_discovery(all_opts[:namespace])
     device
   end
 
@@ -33,16 +34,19 @@ defmodule HueSDK.Discovery.MDNS do
     :ok = Mdns.Client.start()
   end
 
-  defp poll_for_discovery(namespace), do: poll_for_discovery(namespace, 1)
+  defp poll_for_discovery(namespace, max_attempts, sleep) do
+    poll_for_discovery(namespace, max_attempts, sleep, 1)
+  end
 
-  defp poll_for_discovery(namespace, attempt) when attempt < @max_attempts do
-    Logger.debug("mDNS discovery attempt #{attempt}/#{@max_attempts}..")
+  defp poll_for_discovery(namespace, max_attempts, sleep, attempt_no)
+       when attempt_no < max_attempts do
+    Logger.debug("mDNS discovery attempt #{attempt_no}/#{max_attempts}..")
     :ok = Mdns.Client.query(namespace)
 
     case Mdns.Client.devices()[:"#{namespace}"] do
       nil ->
-        :timer.sleep(@sleep)
-        poll_for_discovery(namespace, attempt + 1)
+        :timer.sleep(sleep)
+        poll_for_discovery(namespace, max_attempts, sleep, attempt_no + 1)
 
       [device] ->
         Logger.debug("mDNS discovered device #{inspect(device)}")
@@ -54,7 +58,9 @@ defmodule HueSDK.Discovery.MDNS do
     end
   end
 
-  defp poll_for_discovery(_namespace, _attempt), do: {:mdns, nil}
+  defp poll_for_discovery(_namespace, _max_attempts, _sleep, _attempt_no) do
+    {:mdns, nil}
+  end
 
   defp stop_discovery(namespace) do
     Logger.debug("mDNS stopping discovery for namespace '#{namespace}'..")

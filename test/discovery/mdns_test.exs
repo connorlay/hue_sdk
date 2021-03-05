@@ -5,7 +5,7 @@ defmodule HueSDK.Discovery.MDNSTest do
   @server_ip {127, 0, 0, 1}
   @namespace "_exunit._tcp.local"
 
-  test "discover/0 returns found Mdns devices matching the supplied namespace" do
+  test "discover/0 returns the first found device matching the supplied namespace" do
     host_service = %Mdns.Server.Service{
       domain: @namespace,
       data: :ip,
@@ -25,7 +25,7 @@ defmodule HueSDK.Discovery.MDNSTest do
     Mdns.Server.add_service(host_service)
     Mdns.Server.add_service(tcp_service)
 
-    assert {:mdns, device} = MDNS.discover(@namespace)
+    assert {:mdns, device} = MDNS.discover(namespace: @namespace)
 
     assert device == %Mdns.Client.Device{
              domain: @namespace,
@@ -33,5 +33,9 @@ defmodule HueSDK.Discovery.MDNSTest do
              payload: %{},
              services: [@namespace]
            }
+  end
+
+  test "discover/0 returns {:mdns, nil} if no devices are found" do
+    assert {:mdns, nil} = MDNS.discover(namespace: @namespace, max_attempts: 1, sleep: 0)
   end
 end
