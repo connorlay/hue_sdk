@@ -10,7 +10,7 @@ defmodule HueSDK.Application do
   def start(_type, _args) do
     finch_pools = %{
       # pool for N-UPnP discovery requests
-      NUPNP.url() => [],
+      NUPNP.default_discovery_portal_url() => [],
 
       # pool for bridge requests
       :default => finch_pool_opts(ssl_enabled?())

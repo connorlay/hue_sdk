@@ -39,6 +39,7 @@ defmodule HueSDK.MixProject do
       {:finch, "~> 0.6.1"},
       {:jason, "~> 1.2"},
       {:mdns, "~> 1.0"},
+      {:nimble_options, "~> 0.3.5"},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:bypass, "~> 2.1", only: :test}

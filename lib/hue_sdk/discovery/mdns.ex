@@ -3,13 +3,25 @@ defmodule HueSDK.Discovery.MDNS do
   Automatic discovery for the Hue Bridge via mDNS.
   """
 
-  @default_opts [
-    namespace: "_hue._tcp.local",
-    max_attempts: 10,
-    sleep: 3 * 1000
-  ]
-
   require Logger
+
+  @opts_schema [
+    mdns_namespace: [
+      doc: "The multicast DNS namespace to query.",
+      type: :string,
+      default: "_hue._tcp.local"
+    ],
+    max_attempts: [
+      doc: "How many discovery attempts are made before giving up.",
+      type: :pos_integer,
+      default: 10
+    ],
+    sleep: [
+      doc: "How long to wait in miliseconds between each attempt.",
+      type: :pos_integer,
+      default: 5000
+    ]
+  ]
 
   @typedoc """
   The parsed JSON response, tagged by the discovery protocol.
@@ -17,15 +29,25 @@ defmodule HueSDK.Discovery.MDNS do
   @type mdns_result :: {:mdns, map() | nil}
 
   @doc """
-  Attempts to discover any Hue Bridge devices on the local 
-  network via multicast DNS.
+  Attempts to discover any Hue Bridge devices on the local network via multicast DNS.
+
+  ### Options
+  #{NimbleOptions.docs(@opts_schema)}
   """
   @spec discover(keyword()) :: mdns_result()
   def discover(opts \\ []) do
-    all_opts = Keyword.merge(@default_opts, opts)
-    start_discovery(all_opts[:namespace])
-    device = poll_for_discovery(all_opts[:namespace], all_opts[:max_attempts], all_opts[:sleep])
-    stop_discovery(all_opts[:namespace])
+    vopts = NimbleOptions.validate!(opts, @opts_schema)
+
+    start_discovery(vopts[:mdns_namespace])
+
+    device =
+      poll_for_discovery(
+        vopts[:mdns_namespace],
+        vopts[:max_attempts],
+        vopts[:sleep]
+      )
+
+    stop_discovery(vopts[:namespace])
     device
   end
 
@@ -39,7 +61,7 @@ defmodule HueSDK.Discovery.MDNS do
   end
 
   defp poll_for_discovery(namespace, max_attempts, sleep, attempt_no)
-       when attempt_no < max_attempts do
+       when attempt_no <= max_attempts do
     Logger.debug("mDNS discovery attempt #{attempt_no}/#{max_attempts}..")
     :ok = Mdns.Client.query(namespace)
 
