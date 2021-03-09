@@ -36,17 +36,18 @@ defmodule HueSDK.Discovery.MDNSTest do
 
     assert {:mdns, device} = MDNS.discover(mdns_namespace: @namespace)
 
-    assert device == %Mdns.Client.Device{
+    assert %Mdns.Client.Device{
              domain: @namespace,
-             ip: {192, 168, 1, 13},
+             ip: {_, _, _, _},
              payload: %{"bridgeid" => @bridge_id},
              services: [@namespace]
-           }
+           } = device
 
     Mdns.Server.stop()
   end
 
   test "discover/0 returns {:mdns, nil} if no devices are found" do
-    assert {:mdns, nil} = MDNS.discover(mdns_namespace: "_i_don't_exist._tcp.local", max_attempts: 1, sleep: 1)
+    assert {:mdns, nil} =
+             MDNS.discover(mdns_namespace: "_i_don't_exist._tcp.local", max_attempts: 1, sleep: 1)
   end
 end
