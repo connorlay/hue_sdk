@@ -10,7 +10,7 @@ defmodule HueSDK.HTTP do
   @type method :: Finch.Request.method()
   @type url :: Finch.Request.url()
   @type headers :: Finch.Request.headers()
-  @type body :: iodata()
+  @type body :: iodata() | nil
   @typedoc """
   Function used to parse the raw HTTP response body.
   See `HueSDK.JSON.decode!/1`
@@ -49,7 +49,7 @@ defmodule HueSDK.HTTP do
 
   From the [Philips Hue documentation](https://developers.meethue.com/developing-hue-apps-via-https/): "For your application it is best practice to pin (with the bridge-id) the certificate on first connection with the bridge (“trust on first use”) and check upon later contacts with the same bridge."
   """
-  @spec verify_and_pin_self_signed_cert_fun() :: :ssl.custom_verify()
+  @spec verify_and_pin_self_signed_cert_fun() :: {fun(), []}
   def verify_and_pin_self_signed_cert_fun() do
     table = :ets.new(:hue_sdk_bridge_certs, [:set, :public])
 

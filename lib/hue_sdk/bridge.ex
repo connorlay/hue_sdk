@@ -72,8 +72,8 @@ defmodule HueSDK.Bridge do
 
         bridge
 
-      {:error, http_error} ->
-        Logger.error("Bridge connection failed with error '#{inspect(http_error)}'")
+      {_status, error} ->
+        Logger.error("Bridge connection failed with error '#{inspect(error)}'")
         bridge
     end
   end

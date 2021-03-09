@@ -42,6 +42,7 @@ defmodule HueSDK.MixProject do
       {:nimble_options, "~> 0.3.5"},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:bypass, "~> 2.1", only: :test}
     ]
   end
