@@ -1,79 +1,56 @@
 defmodule HueSDK.Discovery.NUPNP do
   @moduledoc """
-  Automatic discovery for the Hue Bridge via N-UPnP.
+  N-UPnP discovery of the Hue Bridge.
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.{Discovery, HTTP, JSON, Config}
 
   require Logger
 
-  @opts_schema [
-    discovery_portal_url: [
-      doc: "The URL of the Hue Bridge discovery portal.",
-      type: :string,
-      default: "https://discovery.meethue.com/"
-    ],
-    max_attempts: [
-      doc: "How many discovery attempts are made before giving up.",
-      type: :pos_integer,
-      default: 10
-    ],
-    sleep: [
-      doc: "How long to wait in miliseconds between each attempt.",
-      type: :pos_integer,
-      default: 5000
-    ]
-  ]
+  @behaviour Discovery
 
-  @typedoc """
-  The parsed JSON response, tagged by the discovery protocol.
-  """
-  @type nupnp_result :: {:nupnp, map() | nil}
+  @impl true
+  def do_discovery(opts) do
+    devices =
+      poll_for_discovery(
+        Config.hue_portal_url(),
+        opts[:max_attempts],
+        opts[:sleep]
+      )
 
-  @doc """
-  Attempts to discover any Hue Bridge devices on the local
-  network by querying the official Hue Bridge portal.
-
-  ### Options
-  #{NimbleOptions.docs(@opts_schema)}
-  """
-  @spec discover(keyword()) :: nupnp_result()
-  def discover(opts \\ []) do
-    vopts = NimbleOptions.validate!(opts, @opts_schema)
-
-    poll_for_discovery(
-      vopts[:discovery_portal_url],
-      vopts[:max_attempts],
-      vopts[:sleep]
-    )
+    {:nupnp, Enum.map(devices, &to_bridge/1)}
   end
 
-  def default_discovery_portal_url, do: @opts_schema[:discovery_portal_url][:default]
-
-  defp poll_for_discovery(discovery_portal_url, max_attempts, sleep) do
-    poll_for_discovery(discovery_portal_url, max_attempts, sleep, 1)
+  defp poll_for_discovery(nupnp_url, max_attempts, sleep) do
+    poll_for_discovery(nupnp_url, max_attempts, sleep, 1)
   end
 
-  defp poll_for_discovery(discovery_portal_url, max_attempts, sleep, attempt_no)
+  defp poll_for_discovery(nupnp_url, max_attempts, sleep, attempt_no)
        when attempt_no <= max_attempts do
     Logger.debug("N-UPnP discovery attempt #{attempt_no}/#{max_attempts}..")
+    [scheme, host] = String.split(nupnp_url, "://")
 
-    case HTTP.request(:get, discovery_portal_url, [], nil, &JSON.decode!/1) do
-      {:ok, [device]} ->
-        Logger.debug("N-UPnP discovered device #{inspect(device)}")
-        {:nupnp, device}
-
-      {:ok, [device | _devices]} ->
-        Logger.debug("N-UPnP discovered multiple devices, picking first #{inspect(device)}")
-        {:nupnp, device}
+    case HTTP.request(:get, String.to_existing_atom(scheme), host, [], nil, &JSON.decode!/1) do
+      {:ok, devices} when is_list(devices) ->
+        Logger.debug("N-UPnP discovered devices #{inspect(devices)}")
+        devices
 
       _ ->
         :timer.sleep(sleep)
-        poll_for_discovery(discovery_portal_url, max_attempts, sleep, attempt_no + 1)
+        poll_for_discovery(nupnp_url, max_attempts, sleep, attempt_no + 1)
     end
   end
 
-  defp poll_for_discovery(_namespace, _max_attempts, _sleep, _attempt_no) do
-    {:nupnp, nil}
+  defp poll_for_discovery(_namespace, max_attempts, _sleep, _attempt_no) do
+    Logger.warn("N-UPnP exhausted #{max_attempts} discovery attempts!")
+    []
+  end
+
+  defp to_bridge(device) do
+    %HueSDK.Bridge{
+      host: device["internalipaddress"],
+      bridge_id: device["id"],
+      scheme: Config.bridge_scheme()
+    }
   end
 end

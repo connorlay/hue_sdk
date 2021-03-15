@@ -1,54 +1,28 @@
 defmodule HueSDK.Discovery.MDNS do
   @moduledoc """
-  Automatic discovery for the Hue Bridge via mDNS.
+  mDNS discovery of the Hue Bridge.
   """
+
+  alias HueSDK.{Config, Discovery}
 
   require Logger
 
-  @opts_schema [
-    mdns_namespace: [
-      doc: "The multicast DNS namespace to query.",
-      type: :string,
-      default: "_hue._tcp.local"
-    ],
-    max_attempts: [
-      doc: "How many discovery attempts are made before giving up.",
-      type: :pos_integer,
-      default: 10
-    ],
-    sleep: [
-      doc: "How long to wait in miliseconds between each attempt.",
-      type: :pos_integer,
-      default: 5000
-    ]
-  ]
+  @behaviour Discovery
 
-  @typedoc """
-  The parsed JSON response, tagged by the discovery protocol.
-  """
-  @type mdns_result :: {:mdns, map() | nil}
+  @impl true
+  def do_discovery(opts) do
+    start_discovery(opts[:mdns_namespace])
 
-  @doc """
-  Attempts to discover any Hue Bridge devices on the local network via multicast DNS.
-
-  ### Options
-  #{NimbleOptions.docs(@opts_schema)}
-  """
-  @spec discover(keyword()) :: mdns_result()
-  def discover(opts \\ []) do
-    vopts = NimbleOptions.validate!(opts, @opts_schema)
-
-    start_discovery(vopts[:mdns_namespace])
-
-    device =
+    devices =
       poll_for_discovery(
-        vopts[:mdns_namespace],
-        vopts[:max_attempts],
-        vopts[:sleep]
+        opts[:mdns_namespace],
+        opts[:max_attempts],
+        opts[:sleep]
       )
 
-    stop_discovery(vopts[:namespace])
-    device
+    stop_discovery(opts[:mdns_namespace])
+
+    {:mdns, Enum.map(devices, &to_bridge/1)}
   end
 
   defp start_discovery(namespace) do
@@ -70,22 +44,28 @@ defmodule HueSDK.Discovery.MDNS do
         :timer.sleep(sleep)
         poll_for_discovery(namespace, max_attempts, sleep, attempt_no + 1)
 
-      [device] ->
-        Logger.debug("mDNS discovered device #{inspect(device)}")
-        {:mdns, device}
-
-      [device | _devices] ->
-        Logger.debug("mDNS discovered multiple devices, picking first #{inspect(device)}")
-        {:mdns, device}
+      devices when is_list(devices) ->
+        Logger.debug("mDNS discovered devices #{inspect(devices)}")
+        devices
     end
   end
 
   defp poll_for_discovery(_namespace, _max_attempts, _sleep, _attempt_no) do
-    {:mdns, nil}
+    []
   end
 
   defp stop_discovery(namespace) do
     Logger.debug("mDNS stopping discovery for namespace '#{namespace}'..")
     :ok = Mdns.Client.stop()
   end
+
+  defp to_bridge(device) do
+    %HueSDK.Bridge{
+      host: ip_tuple_to_host(device.ip),
+      bridge_id: device.payload["bridgeid"],
+      scheme: Config.bridge_scheme()
+    }
+  end
+
+  defp ip_tuple_to_host({a, b, c, d}), do: "#{a}.#{b}.#{c}.#{d}"
 end

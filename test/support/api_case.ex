@@ -18,7 +18,15 @@ defmodule HueSDK.APICase do
 
   setup do
     bypass = Bypass.open()
-    bridge = %HueSDK.Bridge{host: "localhost:#{bypass.port}", username: "username"}
+
+    bridge = %HueSDK.Bridge{
+      scheme: :http,
+      host: "localhost:#{bypass.port}",
+      username: "username"
+    }
+
+    Application.put_env(:hue_sdk, :portal_url, "http://localhost:#{bypass.port}")
+
     [bypass: bypass, bridge: bridge]
   end
 

@@ -12,6 +12,7 @@ defmodule HueSDK.API.Resourcelinks do
   def get_all_resourcelinks(bridge) do
     HTTP.request(
       :get,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks",
       [],
       nil,
@@ -25,6 +26,7 @@ defmodule HueSDK.API.Resourcelinks do
   def create_resourcelink(bridge, attributes) do
     HTTP.request(
       :post,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks",
       [],
       JSON.encode!(attributes),
@@ -38,6 +40,7 @@ defmodule HueSDK.API.Resourcelinks do
   def update_resourcelink(bridge, resourcelink_id, attributes) do
     HTTP.request(
       :put,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
       [],
       JSON.encode!(attributes),
@@ -51,6 +54,7 @@ defmodule HueSDK.API.Resourcelinks do
   def delete_resourcelink(bridge, resourcelink_id) do
     HTTP.request(
       :delete,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
       [],
       nil,

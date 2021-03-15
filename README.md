@@ -35,8 +35,7 @@ The Hue SDK supports [automatic bridge discovery](https://developers.meethue.com
 
 * [x] N-UPnP
 * [x] mDNS
-* [ ] UPnP
-* [ ] IP Scan
+* [x] Manual IP
 
 ## Protocols
 

@@ -12,6 +12,7 @@ defmodule HueSDK.API.Sensors do
   def get_all_sensors(bridge) do
     HTTP.request(
       :get,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors",
       [],
       nil,
@@ -25,6 +26,7 @@ defmodule HueSDK.API.Sensors do
   def get_sensor_attributes(bridge, sensor_id) do
     HTTP.request(
       :get,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
       [],
       nil,
@@ -38,6 +40,7 @@ defmodule HueSDK.API.Sensors do
   def create_sensor(bridge, attributes) do
     HTTP.request(
       :post,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors",
       [],
       JSON.encode!(attributes),
@@ -51,6 +54,7 @@ defmodule HueSDK.API.Sensors do
   def search_for_new_sensors(bridge) do
     HTTP.request(
       :post,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors",
       [],
       nil,
@@ -64,6 +68,7 @@ defmodule HueSDK.API.Sensors do
   def get_new_sensors(bridge) do
     HTTP.request(
       :get,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/new",
       [],
       nil,
@@ -77,6 +82,7 @@ defmodule HueSDK.API.Sensors do
   def set_sensor_name(bridge, sensor_id, name) do
     HTTP.request(
       :put,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
       [],
       JSON.encode!(%{name: name}),
@@ -90,6 +96,7 @@ defmodule HueSDK.API.Sensors do
   def set_sensor_attributes(bridge, sensor_id, attributes) do
     HTTP.request(
       :put,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/config",
       [],
       JSON.encode!(attributes),
@@ -103,6 +110,7 @@ defmodule HueSDK.API.Sensors do
   def set_sensor_state(bridge, sensor_id, state) do
     HTTP.request(
       :put,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/state",
       [],
       JSON.encode!(state),
@@ -116,6 +124,7 @@ defmodule HueSDK.API.Sensors do
   def delete_sensor(bridge, sensor_id) do
     HTTP.request(
       :delete,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
       [],
       nil,

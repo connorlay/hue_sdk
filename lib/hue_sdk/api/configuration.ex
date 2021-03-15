@@ -12,6 +12,7 @@ defmodule HueSDK.API.Configuration do
   def get_bridge_config(bridge) do
     HTTP.request(
       :get,
+      bridge.scheme,
       "#{bridge.host}/api/config",
       [],
       nil,
@@ -25,6 +26,7 @@ defmodule HueSDK.API.Configuration do
   def modify_bridge_config(bridge, config) do
     HTTP.request(
       :put,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/config",
       [],
       JSON.encode!(config),
@@ -38,6 +40,7 @@ defmodule HueSDK.API.Configuration do
   def get_bridge_datastore(bridge) do
     HTTP.request(
       :get,
+      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}",
       [],
       nil,
@@ -53,6 +56,7 @@ defmodule HueSDK.API.Configuration do
   def create_user(bridge, device_type) do
     HTTP.request(
       :post,
+      bridge.scheme,
       "#{bridge.host}/api/",
       [],
       JSON.encode!(%{devicetype: device_type}),

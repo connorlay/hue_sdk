@@ -1,28 +1,21 @@
 defmodule HueSDK.Discovery.NUPNPTest do
   alias HueSDK.Discovery.NUPNP
+  alias HueSDK.Bridge
 
   use HueSDK.APICase
 
+  @discovery_opts [max_attempts: 3, sleep: 1]
+
   test "discover/0 returns the first found device", %{bypass: bypass} do
-    discovery_portal_url = "localhost:#{bypass.port}/"
+    get(bypass, "/", [%{id: "12345", internalipaddress: "000.0.0.0"}])
 
-    get(bypass, "/", [%{some: "device"}])
-
-    assert {:nupnp, %{"some" => "device"}} =
-             NUPNP.discover(discovery_portal_url: discovery_portal_url)
-
-    get(bypass, "/", [%{some: "device"}, %{other: "device"}])
-
-    assert {:nupnp, %{"some" => "device"}} =
-             NUPNP.discover(discovery_portal_url: discovery_portal_url)
+    assert {:nupnp, [%Bridge{bridge_id: "12345", host: "000.0.0.0"}]} =
+             NUPNP.do_discovery(@discovery_opts)
   end
 
-  test "discover/0 returns {:nupnp, nil} if no devices are found", %{bypass: bypass} do
-    discovery_portal_url = "localhost:#{bypass.port}/"
+  test "discover/0 returns {:nupnp, []} if no devices are found", %{bypass: bypass} do
+    get(bypass, "/", %{"error" => "some error"})
 
-    get(bypass, "/", [])
-
-    assert {:nupnp, nil} =
-             NUPNP.discover(discovery_portal_url: discovery_portal_url, max_attempts: 1, sleep: 1)
+    assert {:nupnp, []} = NUPNP.do_discovery(@discovery_opts)
   end
 end
