@@ -9,7 +9,7 @@ defmodule HueSDK.Application do
   def start(_type, _args) do
     finch_pools = %{
       # pool for N-UPnP discovery requests
-      Config.portal_url() => [],
+      nupnp_url() => [],
 
       # pool for bridge requests
       :default => pool_opts()
@@ -35,5 +35,16 @@ defmodule HueSDK.Application do
     else
       []
     end
+  end
+
+  defp nupnp_url() do
+    scheme =
+      if Config.ssl?() do
+        "https"
+      else
+        "http"
+      end
+
+    "#{scheme}://#{Config.portal_url()}"
   end
 end

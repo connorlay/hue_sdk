@@ -12,7 +12,6 @@ defmodule HueSDK.API.Scenes do
   def get_all_scenes(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/scenes",
       [],
       nil,
@@ -26,7 +25,6 @@ defmodule HueSDK.API.Scenes do
   def get_scene_attributes(bridge, scene_id) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}",
       [],
       nil,
@@ -40,7 +38,6 @@ defmodule HueSDK.API.Scenes do
   def create_scene(bridge, attributes) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/scenes",
       [],
       Jason.encode!(attributes),
@@ -54,7 +51,6 @@ defmodule HueSDK.API.Scenes do
   def modify_scene(bridge, scene_id, attributes) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}/lightstates/#{scene_id}",
       [],
       Jason.encode!(attributes),
@@ -68,7 +64,6 @@ defmodule HueSDK.API.Scenes do
   def delete_scene(bridge, scene_id) do
     HTTP.request(
       :delete,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/scenes/#{scene_id}",
       [],
       nil,

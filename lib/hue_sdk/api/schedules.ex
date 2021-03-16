@@ -12,7 +12,6 @@ defmodule HueSDK.API.Schedules do
   def get_all_schedules(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules",
       [],
       nil,
@@ -26,7 +25,6 @@ defmodule HueSDK.API.Schedules do
   def get_schedule_attributes(bridge, schedule_id) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
       nil,
@@ -40,7 +38,6 @@ defmodule HueSDK.API.Schedules do
   def create_schedule(bridge, attributes) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules",
       [],
       Jason.encode!(attributes),
@@ -54,7 +51,6 @@ defmodule HueSDK.API.Schedules do
   def set_schedule_attributes(bridge, schedule_id, attributes) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
       Jason.encode!(attributes),
@@ -68,7 +64,6 @@ defmodule HueSDK.API.Schedules do
   def delete_schedule(bridge, schedule_id) do
     HTTP.request(
       :delete,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
       nil,

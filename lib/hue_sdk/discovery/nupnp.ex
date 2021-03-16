@@ -26,16 +26,8 @@ defmodule HueSDK.Discovery.NUPNP do
   defp poll_for_discovery(nupnp_url, max_attempts, sleep, attempt_no)
        when attempt_no <= max_attempts do
     Logger.debug("N-UPnP discovery attempt #{attempt_no}/#{max_attempts}..")
-    [scheme, host] = String.split(nupnp_url, "://")
 
-    case HueSDK.HTTP.request(
-           :get,
-           String.to_existing_atom(scheme),
-           host,
-           [],
-           nil,
-           &Jason.decode!/1
-         ) do
+    case HueSDK.HTTP.request(:get, nupnp_url, [], nil, &Jason.decode!/1) do
       {:ok, devices} when is_list(devices) ->
         Logger.debug("N-UPnP discovered devices #{inspect(devices)}")
         devices

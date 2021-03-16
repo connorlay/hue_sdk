@@ -12,7 +12,6 @@ defmodule HueSDK.API.Lights do
   def get_all_lights(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights",
       [],
       nil,
@@ -27,7 +26,6 @@ defmodule HueSDK.API.Lights do
   def get_new_lights(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/new",
       [],
       nil,
@@ -45,7 +43,6 @@ defmodule HueSDK.API.Lights do
   def search_for_new_lights(bridge) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights",
       [],
       nil,
@@ -59,7 +56,6 @@ defmodule HueSDK.API.Lights do
   def get_light_attributes_and_state(bridge, light_id) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{light_id}",
       [],
       nil,
@@ -74,7 +70,6 @@ defmodule HueSDK.API.Lights do
   def set_light_name(bridge, light_id, name) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{light_id}",
       [],
       Jason.encode!(%{name: name}),
@@ -88,7 +83,6 @@ defmodule HueSDK.API.Lights do
   def set_light_state(bridge, id, state) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{id}/state",
       [],
       Jason.encode!(state),
@@ -102,7 +96,6 @@ defmodule HueSDK.API.Lights do
   def delete_light(bridge, id) do
     HTTP.request(
       :delete,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{id}",
       [],
       nil,

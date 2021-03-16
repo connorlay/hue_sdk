@@ -4,7 +4,7 @@ defmodule HueSDK.Config do
   """
 
   @ssl true
-  @portal_url "https://discovery.meethue.com/"
+  @portal_url "discovery.meethue.com/"
 
   @doc """
   Should SSL be used for requests made to the Hue Bridge? Defaults to `#{@ssl}`.

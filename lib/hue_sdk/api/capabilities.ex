@@ -12,7 +12,6 @@ defmodule HueSDK.API.Capabilities do
   def get_all_capabilities(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/capabilities",
       [],
       nil,

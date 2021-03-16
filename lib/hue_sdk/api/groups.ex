@@ -12,7 +12,6 @@ defmodule HueSDK.API.Groups do
   def get_all_groups(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups",
       [],
       nil,
@@ -26,7 +25,6 @@ defmodule HueSDK.API.Groups do
   def create_group(bridge, name, type, light_ids) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups",
       [],
       Jason.encode!(%{lights: light_ids, name: name, type: type}),
@@ -40,7 +38,6 @@ defmodule HueSDK.API.Groups do
   def get_group_attributes(bridge, group_id) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}",
       [],
       nil,
@@ -54,7 +51,6 @@ defmodule HueSDK.API.Groups do
   def set_group_attributes(bridge, group_id, attributes) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}",
       [],
       Jason.encode!(attributes),
@@ -68,7 +64,6 @@ defmodule HueSDK.API.Groups do
   def set_group_state(bridge, group_id, state) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}/action",
       [],
       Jason.encode!(state),
@@ -82,7 +77,6 @@ defmodule HueSDK.API.Groups do
   def delete_group(bridge, group_id) do
     HTTP.request(
       :delete,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}",
       [],
       nil,

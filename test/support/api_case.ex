@@ -22,7 +22,7 @@ defmodule HueSDK.APICase do
       username: "username"
     }
 
-    Application.put_env(:hue_sdk, :portal_url, "http://localhost:#{bypass.port}")
+    Application.put_env(:hue_sdk, :portal_url, "localhost:#{bypass.port}")
 
     [bypass: bypass, bridge: bridge]
   end
