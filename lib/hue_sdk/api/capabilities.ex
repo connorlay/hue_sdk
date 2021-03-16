@@ -4,7 +4,7 @@ defmodule HueSDK.API.Capabilities do
   https://developers.meethue.com/develop/hue-api/10-capabilities-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Allows the user to list capabilities of resources supported in the bridge.
@@ -16,7 +16,7 @@ defmodule HueSDK.API.Capabilities do
       "#{bridge.host}/api/#{bridge.username}/capabilities",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

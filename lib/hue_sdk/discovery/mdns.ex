@@ -3,11 +3,9 @@ defmodule HueSDK.Discovery.MDNS do
   mDNS discovery of the Hue Bridge.
   """
 
-  alias HueSDK.{Config, Discovery}
-
   require Logger
 
-  @behaviour Discovery
+  @behaviour HueSDK.Discovery
 
   @impl true
   def do_discovery(opts) do
@@ -62,8 +60,7 @@ defmodule HueSDK.Discovery.MDNS do
   defp to_bridge(device) do
     %HueSDK.Bridge{
       host: ip_tuple_to_host(device.ip),
-      bridge_id: device.payload["bridgeid"],
-      scheme: Config.bridge_scheme()
+      bridge_id: device.payload["bridgeid"]
     }
   end
 

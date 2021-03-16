@@ -4,7 +4,7 @@ defmodule HueSDK.API.Groups do
   https://developers.meethue.com/develop/hue-api/groups-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all groups that have been added to the bridge. A group is a list of lights that can be created, modified and deleted by a user.
@@ -16,7 +16,7 @@ defmodule HueSDK.API.Groups do
       "#{bridge.host}/api/#{bridge.username}/groups",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -29,8 +29,8 @@ defmodule HueSDK.API.Groups do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups",
       [],
-      JSON.encode!(%{lights: light_ids, name: name, type: type}),
-      &JSON.decode!/1
+      Jason.encode!(%{lights: light_ids, name: name, type: type}),
+      &Jason.decode!/1
     )
   end
 
@@ -44,7 +44,7 @@ defmodule HueSDK.API.Groups do
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -57,8 +57,8 @@ defmodule HueSDK.API.Groups do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -71,8 +71,8 @@ defmodule HueSDK.API.Groups do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}/action",
       [],
-      JSON.encode!(state),
-      &JSON.decode!/1
+      Jason.encode!(state),
+      &Jason.decode!/1
     )
   end
 
@@ -86,7 +86,7 @@ defmodule HueSDK.API.Groups do
       "#{bridge.host}/api/#{bridge.username}/groups/#{group_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

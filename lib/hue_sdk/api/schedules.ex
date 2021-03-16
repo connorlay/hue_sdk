@@ -4,7 +4,7 @@ defmodule HueSDK.API.Schedules do
   https://developers.meethue.com/develop/hue-api/3-schedules-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all schedules that have been added to the bridge.
@@ -16,7 +16,7 @@ defmodule HueSDK.API.Schedules do
       "#{bridge.host}/api/#{bridge.username}/schedules",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -30,7 +30,7 @@ defmodule HueSDK.API.Schedules do
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -43,8 +43,8 @@ defmodule HueSDK.API.Schedules do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -57,8 +57,8 @@ defmodule HueSDK.API.Schedules do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -72,7 +72,7 @@ defmodule HueSDK.API.Schedules do
       "#{bridge.host}/api/#{bridge.username}/schedules/#{schedule_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

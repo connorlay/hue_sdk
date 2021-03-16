@@ -6,8 +6,6 @@ defmodule HueSDK.APICase do
   disabled for these tests. See [this GitHub issue](https://github.com/PSPDFKit-labs/bypass/issues/63).
   """
 
-  alias HueSDK.JSON
-
   use ExUnit.CaseTemplate
 
   using do
@@ -20,7 +18,6 @@ defmodule HueSDK.APICase do
     bypass = Bypass.open()
 
     bridge = %HueSDK.Bridge{
-      scheme: :http,
       host: "localhost:#{bypass.port}",
       username: "username"
     }
@@ -53,10 +50,10 @@ defmodule HueSDK.APICase do
       assert conn.method == method
 
       if req_json do
-        assert JSON.decode!(body) == req_json
+        assert Jason.decode!(body) == req_json
       end
 
-      Plug.Conn.resp(conn, 200, JSON.encode!(resp_json))
+      Plug.Conn.resp(conn, 200, Jason.encode!(resp_json))
     end)
   end
 end

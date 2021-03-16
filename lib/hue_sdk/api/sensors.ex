@@ -4,7 +4,7 @@ defmodule HueSDK.API.Sensors do
   https://developers.meethue.com/develop/hue-api/5-sensors-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all sensors that have been added to the bridge.
@@ -16,7 +16,7 @@ defmodule HueSDK.API.Sensors do
       "#{bridge.host}/api/#{bridge.username}/sensors",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -30,7 +30,7 @@ defmodule HueSDK.API.Sensors do
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -43,8 +43,8 @@ defmodule HueSDK.API.Sensors do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -58,7 +58,7 @@ defmodule HueSDK.API.Sensors do
       "#{bridge.host}/api/#{bridge.username}/sensors",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -72,7 +72,7 @@ defmodule HueSDK.API.Sensors do
       "#{bridge.host}/api/#{bridge.username}/sensors/new",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -85,8 +85,8 @@ defmodule HueSDK.API.Sensors do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
       [],
-      JSON.encode!(%{name: name}),
-      &JSON.decode!/1
+      Jason.encode!(%{name: name}),
+      &Jason.decode!/1
     )
   end
 
@@ -99,8 +99,8 @@ defmodule HueSDK.API.Sensors do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/config",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -113,8 +113,8 @@ defmodule HueSDK.API.Sensors do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}/state",
       [],
-      JSON.encode!(state),
-      &JSON.decode!/1
+      Jason.encode!(state),
+      &Jason.decode!/1
     )
   end
 
@@ -128,7 +128,7 @@ defmodule HueSDK.API.Sensors do
       "#{bridge.host}/api/#{bridge.username}/sensors/#{sensor_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

@@ -4,7 +4,7 @@ defmodule HueSDK.API.Resourcelinks do
   https://developers.meethue.com/develop/hue-api/9-resourcelinks-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all resourcelinks that are in the bridge.
@@ -16,7 +16,7 @@ defmodule HueSDK.API.Resourcelinks do
       "#{bridge.host}/api/#{bridge.username}/resourcelinks",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -29,8 +29,8 @@ defmodule HueSDK.API.Resourcelinks do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -43,8 +43,8 @@ defmodule HueSDK.API.Resourcelinks do
       bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -58,7 +58,7 @@ defmodule HueSDK.API.Resourcelinks do
       "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

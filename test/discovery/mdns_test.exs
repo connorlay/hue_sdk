@@ -34,7 +34,7 @@ defmodule HueSDK.Discovery.MDNSTest do
     Mdns.Server.add_service(tcp_service)
     Mdns.Server.add_service(txt_service)
 
-    assert {:mdns, [%HueSDK.Bridge{bridge_id: @bridge_id, scheme: :http, host: _ip_address}]} =
+    assert {:mdns, [%HueSDK.Bridge{bridge_id: @bridge_id, host: _ip_address}]} =
              MDNS.do_discovery(mdns_namespace: @namespace, max_attempts: 10, sleep: 100)
 
     Mdns.Server.stop()
