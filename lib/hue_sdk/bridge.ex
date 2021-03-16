@@ -24,7 +24,6 @@ defmodule HueSDK.Bridge do
     :api_version,
     :bridge_id,
     :datastore_version,
-    :scheme,
     :host,
     :mac,
     :model_id,

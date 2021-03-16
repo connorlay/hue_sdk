@@ -4,7 +4,7 @@ defmodule HueSDK.API.Lights do
   https://developers.meethue.com/develop/hue-api/lights-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all lights that have been discovered by the bridge.
@@ -12,11 +12,10 @@ defmodule HueSDK.API.Lights do
   def get_all_lights(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -27,11 +26,10 @@ defmodule HueSDK.API.Lights do
   def get_new_lights(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/new",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -45,11 +43,10 @@ defmodule HueSDK.API.Lights do
   def search_for_new_lights(bridge) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -59,11 +56,10 @@ defmodule HueSDK.API.Lights do
   def get_light_attributes_and_state(bridge, light_id) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{light_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -74,11 +70,10 @@ defmodule HueSDK.API.Lights do
   def set_light_name(bridge, light_id, name) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{light_id}",
       [],
-      JSON.encode!(%{name: name}),
-      &JSON.decode!/1
+      Jason.encode!(%{name: name}),
+      &Jason.decode!/1
     )
   end
 
@@ -88,11 +83,10 @@ defmodule HueSDK.API.Lights do
   def set_light_state(bridge, id, state) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{id}/state",
       [],
-      JSON.encode!(state),
-      &JSON.decode!/1
+      Jason.encode!(state),
+      &Jason.decode!/1
     )
   end
 
@@ -102,11 +96,10 @@ defmodule HueSDK.API.Lights do
   def delete_light(bridge, id) do
     HTTP.request(
       :delete,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/lights/#{id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

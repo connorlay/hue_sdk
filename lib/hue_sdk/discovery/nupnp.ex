@@ -3,17 +3,15 @@ defmodule HueSDK.Discovery.NUPNP do
   N-UPnP discovery of the Hue Bridge.
   """
 
-  alias HueSDK.{Discovery, HTTP, JSON, Config}
-
   require Logger
 
-  @behaviour Discovery
+  @behaviour HueSDK.Discovery
 
   @impl true
   def do_discovery(opts) do
     devices =
       poll_for_discovery(
-        Config.hue_portal_url(),
+        HueSDK.Config.portal_url(),
         opts[:max_attempts],
         opts[:sleep]
       )
@@ -28,9 +26,8 @@ defmodule HueSDK.Discovery.NUPNP do
   defp poll_for_discovery(nupnp_url, max_attempts, sleep, attempt_no)
        when attempt_no <= max_attempts do
     Logger.debug("N-UPnP discovery attempt #{attempt_no}/#{max_attempts}..")
-    [scheme, host] = String.split(nupnp_url, "://")
 
-    case HTTP.request(:get, String.to_existing_atom(scheme), host, [], nil, &JSON.decode!/1) do
+    case HueSDK.HTTP.request(:get, nupnp_url, [], nil, &Jason.decode!/1) do
       {:ok, devices} when is_list(devices) ->
         Logger.debug("N-UPnP discovered devices #{inspect(devices)}")
         devices
@@ -49,8 +46,7 @@ defmodule HueSDK.Discovery.NUPNP do
   defp to_bridge(device) do
     %HueSDK.Bridge{
       host: device["internalipaddress"],
-      bridge_id: device["id"],
-      scheme: Config.bridge_scheme()
+      bridge_id: device["id"]
     }
   end
 end

@@ -4,7 +4,7 @@ defmodule HueSDK.API.Configuration do
   https://developers.meethue.com/develop/hue-api/7-configuration-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Returns list of all configuration elements in the bridge. Note all times are stored in UTC.
@@ -12,11 +12,10 @@ defmodule HueSDK.API.Configuration do
   def get_bridge_config(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/config",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -26,11 +25,10 @@ defmodule HueSDK.API.Configuration do
   def modify_bridge_config(bridge, config) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/config",
       [],
-      JSON.encode!(config),
-      &JSON.decode!/1
+      Jason.encode!(config),
+      &Jason.decode!/1
     )
   end
 
@@ -40,11 +38,10 @@ defmodule HueSDK.API.Configuration do
   def get_bridge_datastore(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -56,11 +53,10 @@ defmodule HueSDK.API.Configuration do
   def create_user(bridge, device_type) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/",
       [],
-      JSON.encode!(%{devicetype: device_type}),
-      &JSON.decode!/1
+      Jason.encode!(%{devicetype: device_type}),
+      &Jason.decode!/1
     )
   end
 end

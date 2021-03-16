@@ -11,7 +11,6 @@ defmodule HueSDK.HTTP do
   @type url :: Finch.Request.url()
   @type headers :: Finch.Request.headers()
   @type body :: iodata() | nil
-  @type scheme :: :http | :https
   @typedoc """
   Function used to parse the raw HTTP response body.
   See `HueSDK.JSON.decode!/1`
@@ -22,10 +21,10 @@ defmodule HueSDK.HTTP do
   @doc """
   Sends an HTTP request and decodes the response.
   """
-  @spec request(method(), scheme(), url(), headers(), body(), decoder_fun()) :: response
-  def request(method, scheme, url, headers, body, decoder_fun) do
+  @spec request(method(), url(), headers(), body(), decoder_fun()) :: response
+  def request(method, url, headers, body, decoder_fun) do
     method
-    |> Finch.build("#{Atom.to_string(scheme)}://#{url}", headers, body)
+    |> Finch.build("#{scheme()}://#{url}", headers, body)
     |> Finch.request(__MODULE__)
     |> case do
       {:ok, resp} ->
@@ -35,6 +34,14 @@ defmodule HueSDK.HTTP do
       {:error, error} ->
         Logger.debug("HTTP request method '#{method}' url '#{url}' error '#{inspect(error)}'")
         {:error, error}
+    end
+  end
+
+  defp scheme do
+    if HueSDK.Config.ssl?() do
+      :https
+    else
+      :http
     end
   end
 

@@ -4,7 +4,7 @@ defmodule HueSDK.API.Resourcelinks do
   https://developers.meethue.com/develop/hue-api/9-resourcelinks-api/
   """
 
-  alias HueSDK.{HTTP, JSON}
+  alias HueSDK.HTTP
 
   @doc """
   Gets a list of all resourcelinks that are in the bridge.
@@ -12,11 +12,10 @@ defmodule HueSDK.API.Resourcelinks do
   def get_all_resourcelinks(bridge) do
     HTTP.request(
       :get,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 
@@ -26,11 +25,10 @@ defmodule HueSDK.API.Resourcelinks do
   def create_resourcelink(bridge, attributes) do
     HTTP.request(
       :post,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -40,11 +38,10 @@ defmodule HueSDK.API.Resourcelinks do
   def update_resourcelink(bridge, resourcelink_id, attributes) do
     HTTP.request(
       :put,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
       [],
-      JSON.encode!(attributes),
-      &JSON.decode!/1
+      Jason.encode!(attributes),
+      &Jason.decode!/1
     )
   end
 
@@ -54,11 +51,10 @@ defmodule HueSDK.API.Resourcelinks do
   def delete_resourcelink(bridge, resourcelink_id) do
     HTTP.request(
       :delete,
-      bridge.scheme,
       "#{bridge.host}/api/#{bridge.username}/resourcelinks/#{resourcelink_id}",
       [],
       nil,
-      &JSON.decode!/1
+      &Jason.decode!/1
     )
   end
 end

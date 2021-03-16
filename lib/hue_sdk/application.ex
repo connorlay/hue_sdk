@@ -1,7 +1,3 @@
-# TODO: need to refactor how Finch pools are created so they are either:
-# a) actually runtime configurable (on-demand pools), or
-# b) only compile-time configurable, which means config/*.exs only
-# right now it is a bit of both, which is confusing!
 defmodule HueSDK.Application do
   @moduledoc false
 
@@ -13,10 +9,10 @@ defmodule HueSDK.Application do
   def start(_type, _args) do
     finch_pools = %{
       # pool for N-UPnP discovery requests
-      Config.hue_portal_url() => [],
+      nupnp_url() => [],
 
       # pool for bridge requests
-      :default => default_pool_opts()
+      :default => pool_opts()
     }
 
     children = [
@@ -27,8 +23,8 @@ defmodule HueSDK.Application do
     Supervisor.start_link(children, opts)
   end
 
-  defp default_pool_opts() do
-    if Config.bridge_ssl?() do
+  defp pool_opts() do
+    if Config.ssl?() do
       [
         conn_opts: [
           transport_opts: [
@@ -39,5 +35,16 @@ defmodule HueSDK.Application do
     else
       []
     end
+  end
+
+  defp nupnp_url() do
+    scheme =
+      if Config.ssl?() do
+        "https"
+      else
+        "http"
+      end
+
+    "#{scheme}://#{Config.portal_url()}"
   end
 end
