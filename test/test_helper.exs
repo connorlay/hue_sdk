@@ -1,2 +1,2 @@
-Application.put_env(:hue_sdk, :bridge_ssl, false)
+Mox.defmock(MockDiscovery, for: HueSDK.Discovery)
 ExUnit.start(capture_log: true)
