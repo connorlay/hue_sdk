@@ -4,10 +4,10 @@ defmodule HueSDK.Discovery.ManualIPTest do
   alias HueSDK.Bridge
   alias HueSDK.Discovery.ManualIP
 
-  test "do_discovery/1 returns a basic bridge struct" do
-    ip_address = "127.0.0.1"
+  @ip_address "127.0.0.1"
 
-    assert {:manual_ip, [%Bridge{host: ip_address}]} ==
-             ManualIP.do_discovery(ip_address: ip_address)
+  test "do_discovery/1 returns a basic bridge struct" do
+    assert {:manual_ip, [%Bridge{host: @ip_address}]} ==
+             ManualIP.do_discovery(ip_address: @ip_address)
   end
 end

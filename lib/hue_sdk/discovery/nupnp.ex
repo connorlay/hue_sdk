@@ -44,9 +44,6 @@ defmodule HueSDK.Discovery.NUPNP do
   end
 
   defp to_bridge(device) do
-    %HueSDK.Bridge{
-      host: device["internalipaddress"],
-      bridge_id: device["id"]
-    }
+    %HueSDK.Bridge{host: device["internalipaddress"]}
   end
 end

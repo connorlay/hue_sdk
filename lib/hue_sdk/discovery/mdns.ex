@@ -58,10 +58,7 @@ defmodule HueSDK.Discovery.MDNS do
   end
 
   defp to_bridge(device) do
-    %HueSDK.Bridge{
-      host: ip_tuple_to_host(device.ip),
-      bridge_id: device.payload["bridgeid"]
-    }
+    %HueSDK.Bridge{host: ip_tuple_to_host(device.ip)}
   end
 
   defp ip_tuple_to_host({a, b, c, d}), do: "#{a}.#{b}.#{c}.#{d}"

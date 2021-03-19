@@ -3,48 +3,45 @@ defmodule HueSDK.DiscoveryTest do
 
   import Mox
 
-  use ExUnit.Case, async: true
+  use HueSDK.BypassCase, async: true
 
+  # ensure Mox verifies interactions
   setup :verify_on_exit!
 
   describe "discover/2" do
-    test "returns a full Bridge struct for each discovered device" do
-      # start Bypass server
-      bypass = Bypass.open()
-
+    test "returns a full Bridge struct for each discovered device", %{
+      bypass: bypass,
+      bridge: bridge
+    } do
       # setup MockDiscovery.do_discovery/1 to return a Bridge device
       expect(MockDiscovery, :do_discovery, 1, fn _opts ->
-        {:mock, [%Bridge{host: "localhost:#{bypass.port}"}]}
+        {:mock, [bridge]}
       end)
 
-      # setup config response for `HueSDK.Configuration.get_bridge_config/1`
-      Bypass.expect(bypass, "GET", "/api/config", fn conn ->
-        config_resp = %{
-          "apiversion" => "1.42.0",
-          "bridgeid" => "ecb5fafffe1b6528",
-          "datastoreversion" => "99",
-          "mac" => "ec:b5:fa:1b:65:28",
-          "modelid" => "BSB002",
-          "name" => "Dung Dome Bridge",
-          "swversion" => "1943082030"
-        }
-
-        Plug.Conn.resp(conn, 200, Jason.encode!(config_resp))
-      end)
+      # setup config response for HueSDK.Configuration.get_bridge_config/1
+      get(bypass, "/api/config", %{
+        "apiversion" => "1.42.0",
+        "bridgeid" => "ecb5fafffe1b6528",
+        "datastoreversion" => "99",
+        "mac" => "ec:b5:fa:1b:65:28",
+        "modelid" => "BSB002",
+        "name" => "Dung Dome Bridge",
+        "swversion" => "1943082030"
+      })
 
       # verify Bridge is returned with config data
-      assert {:mock, [bridge]} = Discovery.discover(MockDiscovery)
-
-      assert bridge == %HueSDK.Bridge{
-               api_version: "1.42.0",
-               bridge_id: "ecb5fafffe1b6528",
-               datastore_version: "99",
-               mac: "ec:b5:fa:1b:65:28",
-               model_id: "BSB002",
-               name: "Dung Dome Bridge",
-               sw_version: "1943082030",
-               host: "localhost:#{bypass.port}"
-             }
+      assert {:mock,
+              [
+                %Bridge{
+                  api_version: "1.42.0",
+                  bridge_id: "ecb5fafffe1b6528",
+                  datastore_version: "99",
+                  mac: "ec:b5:fa:1b:65:28",
+                  model_id: "BSB002",
+                  name: "Dung Dome Bridge",
+                  sw_version: "1943082030"
+                }
+              ]} = Discovery.discover(MockDiscovery)
     end
 
     test "raises a NimbleOptions.ValidationError if opts fail validation" do

@@ -7,14 +7,6 @@ defmodule HueSDK.Bridge do
 
   require Logger
 
-  @opts_schema [
-    bridge_directory: [
-      doc: "Where to store serialized bridge structs.",
-      type: :string,
-      default: "~/.hue_sdk/bridge/"
-    ]
-  ]
-
   @typedoc """
   Stateless struct containing Hue Bridge connection information.
   """
@@ -65,30 +57,22 @@ defmodule HueSDK.Bridge do
     end
   end
 
-  @doc """
-  Serializes and writes the Hue Bridge on disk.
+  # Private helper functions for local development. Do not use me!
 
-  ## Options
-  #{NimbleOptions.docs(@opts_schema)}
-  """
-  @spec write_to_disk(t(), keyword()) :: :ok
-  def write_to_disk(%__MODULE__{} = bridge, opts \\ []) do
-    bridge_directory = ensure_bridge_directory(opts)
+  @bridge_directory "~/.config/hue_sdk"
+
+  @doc false
+  def write_to_disk(%__MODULE__{} = bridge) do
+    bridge_directory = ensure_bridge_directory()
     bridge_file = Path.join([bridge_directory, bridge.bridge_id])
     File.write!(bridge_file, :erlang.term_to_binary(bridge))
     Logger.debug("Bridge write to '#{bridge_file}'")
     :ok
   end
 
-  @doc """
-  Deserializes all Hue Bridges filess tored on disk.
-
-  ## Options
-  #{NimbleOptions.docs(@opts_schema)}
-  """
-  @spec read_from_disk(keyword()) :: [t()]
-  def read_from_disk(opts \\ []) do
-    bridge_directory = ensure_bridge_directory(opts)
+  @doc false
+  def read_from_disk() do
+    bridge_directory = ensure_bridge_directory()
 
     for bridge_id <- File.ls!(bridge_directory) do
       bridge_file = Path.join([bridge_directory, bridge_id])
@@ -104,15 +88,9 @@ defmodule HueSDK.Bridge do
     end
   end
 
-  @doc """
-  Deletes all Hue Bridge files stored on disk.
-
-  ## Options
-  #{NimbleOptions.docs(@opts_schema)}
-  """
-  @spec cleanup(keyword()) :: :ok
-  def cleanup(opts \\ []) do
-    bridge_directory = ensure_bridge_directory(opts)
+  @doc false
+  def cleanup() do
+    bridge_directory = ensure_bridge_directory()
 
     for bridge_id <- File.ls!(bridge_directory) do
       bridge_file = Path.join([bridge_directory, bridge_id])
@@ -123,12 +101,8 @@ defmodule HueSDK.Bridge do
     :ok
   end
 
-  defp ensure_bridge_directory(opts) do
-    bridge_directory =
-      opts
-      |> NimbleOptions.validate!(@opts_schema)
-      |> Keyword.get(:bridge_directory)
-      |> Path.expand()
+  defp ensure_bridge_directory() do
+    bridge_directory = Path.expand(@bridge_directory)
 
     unless File.exists?(bridge_directory) do
       Logger.debug("Bridge directory created at '#{bridge_directory}'")

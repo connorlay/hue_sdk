@@ -17,7 +17,7 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
         with:
-          elixir-version: 1.11.3
+          elixir-version: 1.11.4
           otp-version: 23.2
 
       - name: Restore dependencies cache
@@ -47,4 +47,4 @@ jobs:
         run: mix dialyzer
 
       - name: Run tests
-        run: mix test --trace --cover
+        run: mix test --cover

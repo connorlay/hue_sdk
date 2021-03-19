@@ -1,7 +1,7 @@
 defmodule HueSDK.API.LightsTest do
   alias HueSDK.API.Lights
 
-  use HueSDK.APICase, async: true
+  use HueSDK.BypassCase, async: true
 
   @json_resp %{"1" => %{"name" => "example"}}
   @http_error %Mint.TransportError{reason: :econnrefused}

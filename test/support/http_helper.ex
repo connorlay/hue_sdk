@@ -1,30 +1,20 @@
-defmodule HueSDK.APICase do
-  @moduledoc """
-  `ExUnit.CaseTemplate` used for testing functions under the `HueSDK.API` namespace.
+defmodule HueSDK.HTTPHelper do
+  @moduledoc false
+  # Helper functions for testing HTTP calls made by the `HueSDK.HTTP` module.
 
-  Utlizes `Bypass` as a stubbed HTTP server. SSL is not currently supported, so it is
-  disabled for these tests. See [this GitHub issue](https://github.com/PSPDFKit-labs/bypass/issues/63).
-  """
+  # Utlizes `Bypass` as a stubbed HTTP server. SSL is not currently supported, so it is
+  # disabled for these tests. See [this GitHub issue](https://github.com/PSPDFKit-labs/bypass/issues/63).
 
-  use ExUnit.CaseTemplate
+  alias Plug.Conn
+  alias HueSDK.Bridge
 
-  using do
-    quote do
-      import HueSDK.APICase
-    end
-  end
+  import ExUnit.Assertions
 
-  setup do
-    bypass = Bypass.open()
-
-    bridge = %HueSDK.Bridge{
+  def build_bridge(bypass) do
+    %Bridge{
       host: "localhost:#{bypass.port}",
       username: "username"
     }
-
-    Application.put_env(:hue_sdk, :portal_url, "localhost:#{bypass.port}")
-
-    [bypass: bypass, bridge: bridge]
   end
 
   def get(bypass, path, resp_json) do
@@ -45,7 +35,7 @@ defmodule HueSDK.APICase do
 
   defp setup_bypass_expectation(bypass, method, path, req_json, resp_json) do
     Bypass.expect(bypass, fn conn ->
-      {:ok, body, conn} = Plug.Conn.read_body(conn)
+      {:ok, body, conn} = Conn.read_body(conn)
       assert conn.request_path == path
       assert conn.method == method
 
@@ -53,7 +43,7 @@ defmodule HueSDK.APICase do
         assert Jason.decode!(body) == req_json
       end
 
-      Plug.Conn.resp(conn, 200, Jason.encode!(resp_json))
+      Conn.resp(conn, 200, Jason.encode!(resp_json))
     end)
   end
 end
