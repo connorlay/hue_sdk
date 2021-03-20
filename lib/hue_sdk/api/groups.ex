@@ -1,14 +1,16 @@
 defmodule HueSDK.API.Groups do
   @moduledoc """
-  Interface to the Groups API
-  https://developers.meethue.com/develop/hue-api/groups-api/
+  Interface to the Groups API.
+
+  See the [official documentation](https://developers.meethue.com/develop/hue-api/groups-api/) for more information.
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{Bridge, HTTP}
 
   @doc """
   Gets a list of all groups that have been added to the bridge. A group is a list of lights that can be created, modified and deleted by a user.
   """
+  @spec get_all_groups(Bridge.t()) :: HTTP.response()
   def get_all_groups(bridge) do
     HTTP.request(
       :get,
@@ -22,6 +24,7 @@ defmodule HueSDK.API.Groups do
   @doc """
   Creates a new group containing the lights specified and optional name. A new group is created in the bridge with the next available id.
   """
+  @spec create_group(Bridge.t(), String.t(), String.t(), [String.t()]) :: HTTP.response()
   def create_group(bridge, name, type, light_ids) do
     HTTP.request(
       :post,
@@ -35,6 +38,7 @@ defmodule HueSDK.API.Groups do
   @doc """
   Gets the group attributes, e.g. name, light membership and last command for a given group.
   """
+  @spec get_group_attributes(Bridge.t(), String.t()) :: HTTP.response()
   def get_group_attributes(bridge, group_id) do
     HTTP.request(
       :get,
@@ -48,6 +52,7 @@ defmodule HueSDK.API.Groups do
   @doc """
   Allows the user to modify the name, light and class membership of a group.
   """
+  @spec set_group_attributes(Bridge.t(), String.t(), map()) :: HTTP.response()
   def set_group_attributes(bridge, group_id, attributes) do
     HTTP.request(
       :put,
@@ -61,6 +66,7 @@ defmodule HueSDK.API.Groups do
   @doc """
   Modifies the state of all lights in a group.
   """
+  @spec set_group_state(Bridge.t(), String.t(), map()) :: HTTP.response()
   def set_group_state(bridge, group_id, state) do
     HTTP.request(
       :put,
@@ -74,6 +80,7 @@ defmodule HueSDK.API.Groups do
   @doc """
   Deletes the specified group from the bridge.  
   """
+  @spec delete_group(Bridge.t(), String.t()) :: HTTP.response()
   def delete_group(bridge, group_id) do
     HTTP.request(
       :delete,

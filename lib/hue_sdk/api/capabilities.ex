@@ -1,14 +1,16 @@
 defmodule HueSDK.API.Capabilities do
   @moduledoc """
-  Interface to the Capabilities API
-  https://developers.meethue.com/develop/hue-api/10-capabilities-api/
+  Interface to the Hue Bridge Capabilities API.
+
+  See the [official documentation](https://developers.meethue.com/develop/hue-api/10-capabilities-api/) for more information.
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{Bridge, HTTP}
 
   @doc """
   Allows the user to list capabilities of resources supported in the bridge.
   """
+  @spec get_all_capabilities(Bridge.t()) :: HTTP.response()
   def get_all_capabilities(bridge) do
     HTTP.request(
       :get,

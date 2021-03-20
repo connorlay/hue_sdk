@@ -16,7 +16,13 @@ defmodule HueSDK.MixProject do
       homepage_url: "https://github.com/connorlay/hue_sdk",
       docs: [
         main: "HueSDK",
-        extras: ["README.md"]
+        # api_reference: false,
+        groups_for_modules: [
+          "Bridge Discovery": [~r/HueSDK.Discovery.*/],
+          "REST API": [~r/HueSDK.API.*/]
+        ],
+        nest_modules_by_prefix: [HueSDK.API, HueSDK.Discovery],
+        extras: ["README.md", "LICENSE", "CHANGELOG.md"]
       ]
     ]
   end

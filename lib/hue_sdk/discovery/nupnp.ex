@@ -1,17 +1,23 @@
 defmodule HueSDK.Discovery.NUPNP do
   @moduledoc """
   N-UPnP discovery of the Hue Bridge.
+
+  Requires a Hue Bridge registered with the official Philips Hue Discovery Portal.
+
+  See `HueSDK.Discovery` for available options.
   """
+
+  alias HueSDK.{Bridge, Config, Discovery, HTTP}
 
   require Logger
 
-  @behaviour HueSDK.Discovery
+  @behaviour Discovery
 
   @impl true
   def do_discovery(opts) do
     devices =
       poll_for_discovery(
-        HueSDK.Config.portal_url(),
+        Config.portal_host(),
         opts[:max_attempts],
         opts[:sleep]
       )
@@ -19,31 +25,31 @@ defmodule HueSDK.Discovery.NUPNP do
     {:nupnp, Enum.map(devices, &to_bridge/1)}
   end
 
-  defp poll_for_discovery(nupnp_url, max_attempts, sleep) do
-    poll_for_discovery(nupnp_url, max_attempts, sleep, 1)
+  defp poll_for_discovery(portal_host, max_attempts, sleep) do
+    poll_for_discovery(portal_host, max_attempts, sleep, 1)
   end
 
-  defp poll_for_discovery(nupnp_url, max_attempts, sleep, attempt_no)
+  defp poll_for_discovery(portal_host, max_attempts, sleep, attempt_no)
        when attempt_no <= max_attempts do
-    Logger.debug("N-UPnP discovery attempt #{attempt_no}/#{max_attempts}..")
+    Logger.debug("[#{__MODULE__}] discovery attempt #{attempt_no}/#{max_attempts}..")
 
-    case HueSDK.HTTP.request(:get, nupnp_url, [], nil, &Jason.decode!/1) do
+    case HTTP.request(:get, portal_host, [], nil, &Jason.decode!/1) do
       {:ok, devices} when is_list(devices) ->
-        Logger.debug("N-UPnP discovered devices #{inspect(devices)}")
+        Logger.debug("[#{__MODULE__}] discovered devices #{inspect(devices)}")
         devices
 
       _ ->
         :timer.sleep(sleep)
-        poll_for_discovery(nupnp_url, max_attempts, sleep, attempt_no + 1)
+        poll_for_discovery(portal_host, max_attempts, sleep, attempt_no + 1)
     end
   end
 
-  defp poll_for_discovery(_namespace, max_attempts, _sleep, _attempt_no) do
-    Logger.warn("N-UPnP exhausted #{max_attempts} discovery attempts!")
+  defp poll_for_discovery(_portal_host, max_attempts, _sleep, _attempt_no) do
+    Logger.warn("[#{__MODULE__}] exhausted #{max_attempts} discovery attempts!")
     []
   end
 
   defp to_bridge(device) do
-    %HueSDK.Bridge{host: device["internalipaddress"]}
+    %Bridge{host: device["internalipaddress"]}
   end
 end

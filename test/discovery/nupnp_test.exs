@@ -8,7 +8,7 @@ defmodule HueSDK.Discovery.NUPNPTest do
 
   setup %{bypass: bypass} do
     # configure discovery portal to point to bypass server
-    Application.put_env(:hue_sdk, :portal_url, "localhost:#{bypass.port}")
+    Application.put_env(:hue_sdk, :portal_host, "localhost:#{bypass.port}")
   end
 
   test "discover/0 returns the first found device", %{bypass: bypass} do

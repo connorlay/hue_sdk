@@ -11,7 +11,7 @@ alias HueSDK.API.{
 }
 
 bridge =
-  case HueSDK.Bridge.read_from_disk() do
+  case HueSDK.Bridge.__read_from_disk__() do
     [bridge] -> bridge
     [] -> nil
   end

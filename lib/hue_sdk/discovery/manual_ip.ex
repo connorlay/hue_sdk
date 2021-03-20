@@ -1,9 +1,13 @@
 defmodule HueSDK.Discovery.ManualIP do
   @moduledoc """
   Manual IP discovery of the Hue Bridge.
+
+  See `HueSDK.Discovery` for available options.
   """
 
-  @behaviour HueSDK.Discovery
+  alias HueSDK.{Bridge, Discovery}
+
+  @behaviour Discovery
 
   @impl true
   def do_discovery(opts) do
@@ -11,6 +15,6 @@ defmodule HueSDK.Discovery.ManualIP do
   end
 
   defp to_bridge(ip_address) do
-    %HueSDK.Bridge{host: ip_address}
+    %Bridge{host: ip_address}
   end
 end

@@ -1,9 +1,12 @@
 defmodule HueSDK.Discovery do
   @moduledoc """
-  Automatic discovery of the Hue Bridge.
+  Automatic discovery of Hue Bridge devices available on the local network.
+
+  See `HueSDK.Discovery.discover/2` for examples.
   """
 
   alias HueSDK.API.Configuration
+  alias HueSDK.Bridge
 
   @opts_schema [
     ip_address: [
@@ -30,7 +33,7 @@ defmodule HueSDK.Discovery do
   @typedoc """
   A list of discovered Hue Bridge devices, tagged by the discovery strategy.
   """
-  @type discovery_result :: {atom(), [HueSDK.Bridge.t()]}
+  @type discovery_result :: {atom(), [Bridge.t()]}
 
   @doc """
   Attempts to discover all available Hue Bridge devices on the local network.
@@ -44,25 +47,35 @@ defmodule HueSDK.Discovery do
 
   ## Examples
 
-  Discovering a Hue Bridge via the discovery portal URL:
+  Discovering a Hue Bridge device via the discovery portal URL:
 
-      HueSDK.Bridge.discover(HueSDK.Discovery.NUPNP)
+      HueSDK.Discovery.discover(HueSDK.Discovery.NUPNP)
+
       {:nupnp, [%HueSDK.Bridge{}]}
 
-  Discovering a Hue Bridge via multicast DNS:
+  Discovering a Hue Bridge device via multicast DNS:
 
-      HueSDK.Bridge.discover(HueSDK.Discovery.MDNS)
+      HueSDK.Discovery.discover(HueSDK.Discovery.MDNS)
+
       {:mdns, [%HueSDK.Bridge{}]}
 
-  Discovering a Hue Bridge via a manually supplied IP address :
+  Discovering a Hue Bridge device via a manually supplied IP address :
 
-      HueSDK.Bridge.discover(HueSDK.Discovery.ManualIP, ip_address: "127.0.0.1")
+      HueSDK.Discovery.discover(HueSDK.Discovery.ManualIP, ip_address: "127.0.0.1")
+
       {:manual_ip, [%HueSDK.Bridge{}]}
 
   An empty list is returned if no Hue Bridge devices are found:
 
-      HueSDK.Bridge.discover(HueSDK.Discovery.ManualIP, ip_address: "000.0.0.0")
+      HueSDK.Discovery.discover(HueSDK.Discovery.ManualIP, ip_address: "000.0.0.0")
+
       {:mdns, []}
+
+  If invalid options are given, a `NimbleOptions.ValidationError` is raised:
+
+      HueSDK.Discovery.discover(HueSDK.Discovery.ManualIP, invalid_opt: :invalid_opt)
+
+      ** (NimbleOptions.ValidationError) unknown options [:invalid_opt], valid options are: [:ip_address, :mdns_namespace, :max_attempts, :sleep]
 
   ## Options
   #{NimbleOptions.docs(@opts_schema)}

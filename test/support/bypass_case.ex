@@ -22,6 +22,8 @@ defmodule HueSDK.BypassCase do
 
     # ensure the bypass server stops when the test exits
     on_exit(fn -> Bypass.down(bypass) end)
+
+    # expose bypass and bridge to each test case
     [bypass: bypass, bridge: bridge]
   end
 end

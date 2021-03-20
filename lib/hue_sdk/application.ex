@@ -45,6 +45,6 @@ defmodule HueSDK.Application do
         "http"
       end
 
-    "#{scheme}://#{Config.portal_url()}"
+    "#{scheme}://#{Config.portal_host()}"
   end
 end

@@ -1,14 +1,16 @@
 defmodule HueSDK.API.Resourcelinks do
   @moduledoc """
-  Interface to the Resourcelinks API
-  https://developers.meethue.com/develop/hue-api/9-resourcelinks-api/
+  Interface to the Resourcelinks API.
+
+  See the [official documentation](https://developers.meethue.com/develop/hue-api/9-resourcelinks-api/) for more information.
   """
 
-  alias HueSDK.HTTP
+  alias HueSDK.{Bridge, HTTP}
 
   @doc """
   Gets a list of all resourcelinks that are in the bridge.
   """
+  @spec get_all_resourcelinks(Bridge.t()) :: HTTP.response()
   def get_all_resourcelinks(bridge) do
     HTTP.request(
       :get,
@@ -22,6 +24,7 @@ defmodule HueSDK.API.Resourcelinks do
   @doc """
   Creates a new resourcelink in the bridge and generates a unique identifier for this resourcelink.
   """
+  @spec create_resourcelink(Bridge.t(), map()) :: HTTP.response()
   def create_resourcelink(bridge, attributes) do
     HTTP.request(
       :post,
@@ -35,6 +38,7 @@ defmodule HueSDK.API.Resourcelinks do
   @doc """
   Updates individual or multiple attributes of an existing resourcelink. At least one attribute has to be provided.
   """
+  @spec update_resourcelink(Bridge.t(), String.t(), map()) :: HTTP.response()
   def update_resourcelink(bridge, resourcelink_id, attributes) do
     HTTP.request(
       :put,
@@ -48,6 +52,7 @@ defmodule HueSDK.API.Resourcelinks do
   @doc """
   Deletes the specified resourcelink from the bridge.
   """
+  @spec delete_resourcelink(Bridge.t(), String.t()) :: HTTP.response()
   def delete_resourcelink(bridge, resourcelink_id) do
     HTTP.request(
       :delete,

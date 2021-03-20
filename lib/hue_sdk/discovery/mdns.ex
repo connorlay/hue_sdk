@@ -1,16 +1,18 @@
 defmodule HueSDK.Discovery.MDNS do
   @moduledoc """
   mDNS discovery of the Hue Bridge.
+
+  See `HueSDK.Discovery` for available options.
   """
+
+  alias HueSDK.{Bridge, Discovery}
 
   require Logger
 
-  @behaviour HueSDK.Discovery
+  @behaviour Discovery
 
   @impl true
   def do_discovery(opts) do
-    start_discovery(opts[:mdns_namespace])
-
     devices =
       poll_for_discovery(
         opts[:mdns_namespace],
@@ -18,23 +20,17 @@ defmodule HueSDK.Discovery.MDNS do
         opts[:sleep]
       )
 
-    stop_discovery(opts[:mdns_namespace])
-
     {:mdns, Enum.map(devices, &to_bridge/1)}
   end
 
-  defp start_discovery(namespace) do
-    Logger.debug("mDNS starting discovery for namespace '#{namespace}'")
-    :ok = Mdns.Client.start()
-  end
-
   defp poll_for_discovery(namespace, max_attempts, sleep) do
+    :ok = Mdns.Client.start()
     poll_for_discovery(namespace, max_attempts, sleep, 1)
   end
 
   defp poll_for_discovery(namespace, max_attempts, sleep, attempt_no)
        when attempt_no <= max_attempts do
-    Logger.debug("mDNS discovery attempt #{attempt_no}/#{max_attempts}..")
+    Logger.debug("[#{__MODULE__}] discovery attempt #{attempt_no}/#{max_attempts}..")
     :ok = Mdns.Client.query(namespace)
 
     case Mdns.Client.devices()[:"#{namespace}"] do
@@ -43,22 +39,19 @@ defmodule HueSDK.Discovery.MDNS do
         poll_for_discovery(namespace, max_attempts, sleep, attempt_no + 1)
 
       devices when is_list(devices) ->
-        Logger.debug("mDNS discovered devices #{inspect(devices)}")
+        Logger.debug("[#{__MODULE__}] discovered devices #{inspect(devices)}")
         devices
     end
   end
 
-  defp poll_for_discovery(_namespace, _max_attempts, _sleep, _attempt_no) do
+  defp poll_for_discovery(_namespace, max_attempts, _sleep, _attempt_no) do
+    Logger.warn("[#{__MODULE__}] exhausted #{max_attempts} discovery attempts!")
+    :ok = Mdns.Client.stop()
     []
   end
 
-  defp stop_discovery(namespace) do
-    Logger.debug("mDNS stopping discovery for namespace '#{namespace}'..")
-    :ok = Mdns.Client.stop()
-  end
-
   defp to_bridge(device) do
-    %HueSDK.Bridge{host: ip_tuple_to_host(device.ip)}
+    %Bridge{host: ip_tuple_to_host(device.ip)}
   end
 
   defp ip_tuple_to_host({a, b, c, d}), do: "#{a}.#{b}.#{c}.#{d}"
