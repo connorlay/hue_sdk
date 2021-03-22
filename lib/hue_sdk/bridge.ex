@@ -98,7 +98,7 @@ defmodule HueSDK.Bridge do
   end
 
   @doc false
-  def __read_from_disk__() do
+  def __read_from_disk__ do
     bridge_directory = __ensure_bridge_directory__()
 
     for bridge_id <- File.ls!(bridge_directory) do
@@ -116,7 +116,7 @@ defmodule HueSDK.Bridge do
   end
 
   @doc false
-  def __cleanup__() do
+  def __cleanup__ do
     bridge_directory = __ensure_bridge_directory__()
 
     for bridge_id <- File.ls!(bridge_directory) do
@@ -128,7 +128,7 @@ defmodule HueSDK.Bridge do
     :ok
   end
 
-  defp __ensure_bridge_directory__() do
+  defp __ensure_bridge_directory__ do
     bridge_directory = Path.expand(@bridge_directory)
 
     unless File.exists?(bridge_directory) do

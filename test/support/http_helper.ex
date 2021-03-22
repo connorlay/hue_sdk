@@ -5,8 +5,8 @@ defmodule HueSDK.HTTPHelper do
   # Utlizes `Bypass` as a stubbed HTTP server. SSL is not currently supported, so it is
   # disabled for these tests. See [this GitHub issue](https://github.com/PSPDFKit-labs/bypass/issues/63).
 
-  alias Plug.Conn
   alias HueSDK.Bridge
+  alias Plug.Conn
 
   import ExUnit.Assertions
 

@@ -23,7 +23,7 @@ defmodule HueSDK.Application do
     Supervisor.start_link(children, opts)
   end
 
-  defp pool_opts() do
+  defp pool_opts do
     if Config.ssl?() do
       [
         conn_opts: [
@@ -37,7 +37,7 @@ defmodule HueSDK.Application do
     end
   end
 
-  defp nupnp_url() do
+  defp nupnp_url do
     scheme =
       if Config.ssl?() do
         "https"

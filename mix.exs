@@ -9,21 +9,11 @@ defmodule HueSDK.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-
-      # Docs
+      docs: docs(),
+      package: package(),
       name: "HueSDK",
       source_url: "https://github.com/connorlay/hue_sdk",
-      homepage_url: "https://github.com/connorlay/hue_sdk",
-      docs: [
-        main: "HueSDK",
-        # api_reference: false,
-        groups_for_modules: [
-          "Bridge Discovery": [~r/HueSDK.Discovery.*/],
-          "REST API": [~r/HueSDK.API.*/]
-        ],
-        nest_modules_by_prefix: [HueSDK.API, HueSDK.Discovery],
-        extras: ["README.md", "LICENSE", "CHANGELOG.md"]
-      ]
+      homepage_url: "https://github.com/connorlay/hue_sdk"
     ]
   end
 
@@ -51,6 +41,25 @@ defmodule HueSDK.MixProject do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test}
+    ]
+  end
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/connorlay/hue_sdk"}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "HueSDK",
+      groups_for_modules: [
+        "Bridge Discovery": [~r/HueSDK.Discovery.*/],
+        "REST API": [~r/HueSDK.API.*/]
+      ],
+      nest_modules_by_prefix: [HueSDK.API, HueSDK.Discovery],
+      extras: ["README.md", "LICENSE", "CHANGELOG.md", "CONTRIBUTING.md"]
     ]
   end
 end
