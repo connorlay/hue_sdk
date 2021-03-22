@@ -1,6 +1,7 @@
 defmodule HueSDK.Discovery.MDNSTest do
-  alias HueSDK.Discovery.MDNS
   alias HueSDK.Bridge
+  alias HueSDK.Discovery.MDNS
+
   use ExUnit.Case, async: true
 
   @server_ip {127, 0, 0, 1}

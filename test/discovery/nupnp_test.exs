@@ -1,6 +1,6 @@
 defmodule HueSDK.Discovery.NUPNPTest do
-  alias HueSDK.Discovery.NUPNP
   alias HueSDK.Bridge
+  alias HueSDK.Discovery.NUPNP
 
   use HueSDK.BypassCase, async: true
 

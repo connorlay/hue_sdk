@@ -51,7 +51,7 @@ defmodule HueSDK.HTTP do
   # From the [Philips Hue documentation](https://developers.meethue.com/developing-hue-apps-via-https/): "For your application it is best practice to pin (with the bridge-id) the certificate on first connection with the bridge (“trust on first use”) and check upon later contacts with the same bridge."
   @doc false
   @spec verify_and_pin_self_signed_cert_fun() :: {fun(), []}
-  def verify_and_pin_self_signed_cert_fun() do
+  def verify_and_pin_self_signed_cert_fun do
     table = :ets.new(:hue_sdk_bridge_certs, [:set, :public])
 
     verify_fun = fn otp_cert, _reason, state ->

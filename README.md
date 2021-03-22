@@ -78,7 +78,7 @@ Automatically discover your Hue Bridge device available on your local network:
 {:nupnp, [bridge]} = HueSDK.Discovery.discover(HueSDK.Discovery.NUPNP)
 ```
 
-Press the link button on your Hue Bridge device and start the authentication process:
+Press the link button on your Hue Bridge device and authenticate a new user:
 
 ```elixir
 bridge = HueSDK.Bridge.authenticate(bridge, "connorlay#huesdk")
@@ -141,6 +141,17 @@ HueSDK.API.Lights.get_all_lights(bridge)
 }
 ```
 
-That's it!
-
 <!-- MDOC !-->
+
+## Additional Resources
+
+- The Hue Developers [forum](https://developers.meethue.com/forum/).
+- The Hue API [documentation](https://developers.meethue.com/develop/hue-api/).
+
+## Acknowledgments
+
+To the authors of [Huex](https://github.com/xavier/huex) and [Yet Another Hue API](https://github.com/ZeroOne3010/yetanotherhueapi), which served as inspiration for `HueSDK`.
+
+To the maintainers of [Finch](https://github.com/keathley/finch), [Jason](https://github.com/michalmuskala/jason), [Mdns](https://github.com/rosetta-home/mdns), and [NimbleOptions](https://github.com/dashbitco/nimble_options) for their ongoing efforts.
+
+To [Philips and Signify](https://www.philips-hue.com/en-us/about-us) for creating the Hue Lighting system and opening the REST API for developers.
